@@ -50,6 +50,8 @@ public class WindowStyle : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
             minimizeBox,
             maximizeBox
         );
+
+        ResetWindowSize();
     }
 
     private void OnGUI()
@@ -191,9 +193,6 @@ public class WindowStyle : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
 
     public void ResizableBorderless()
     {
-        var activeWindow = WinApi.GetActiveWindow();
-
-
 //        WinApi.SetWindowLong(activeWindow,
 //            (int) WindowLongIndex.Style,
 //            (uint) WindowStyleFlags.Visible | (uint) WindowStyleFlags.Popup | (uint) WindowStyleFlags.SizeBox);

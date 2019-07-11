@@ -49,7 +49,7 @@ public class WindowManager
         BorderSize = borderSize;
         MinWindowSize = minWindowSize;
         MaxWindowSize = maxWindowSize;
-        
+
 
         Resizable = resizable;
         Bordered = bordered;
@@ -60,7 +60,7 @@ public class WindowManager
         SystemMenu = systemMenu;
         MinimizeBox = minimizeBox;
         MaximizeBox = maximizeBox;
-        
+
         HandledWindow = new HandleRef(null, WinApi.GetActiveWindow());
         _newWindowProcesses = WindowProcesses;
         _newWindowProcessesPtr = Marshal.GetFunctionPointerForDelegate(_newWindowProcesses);
@@ -114,7 +114,6 @@ public class WindowManager
         #endregion
 
 
-       
         UpdateWindowStyle();
     }
 
@@ -199,7 +198,7 @@ public class WindowManager
     public static void UpdateWindowStyle()
     {
         var style = GetWindowStyleFlags();
-        
+
         WinApi.SetWindowLongPtr(HandledWindow, (int) WindowLongIndex.Style, (IntPtr) style);
         WinApi.SetWindowLongPtr(HandledWindow, (int) WindowLongIndex.ExtendedStyle, (IntPtr) 0);
 
@@ -312,18 +311,59 @@ public class WindowManager
     {
         uint style = 0;
 
-        style |= Visible ? (uint) WindowStyleFlags.Visible : 0;
-        style |= Bordered ? (uint) WindowStyleFlags.Border : (uint) WindowStyleFlags.Popup;
-        style |= Maximized ? (uint) WindowStyleFlags.Maximize : 0;
-        style |= MinimizeBox ? (uint) WindowStyleFlags.MinimizeBox : 0;
-        style |= MaximizeBox ? (uint) WindowStyleFlags.MaximizeBox : 0;
-        style |= Resizable ? (uint) WindowStyleFlags.ThickFrame : 0;
-        style |= SystemMenu ? (uint) WindowStyleFlags.SystemMenu : 0;
-        style |= Caption ? (uint) WindowStyleFlags.Caption : 0;
-        style |= Overlapped ? (uint) WindowStyleFlags.Overlapped : 0;
+        if (Visible)
+        {
+            style |= (uint) WindowStyleFlags.Visible;
+        }
 
 
-//        Overlapped | Caption | SystemMenu | ThickFrame | MinimizeBox | MaximizeBox,
+        if (Bordered)
+        {
+            style |= (uint) WindowStyleFlags.Border;
+        }
+        else
+        {
+            style |= (uint) WindowStyleFlags.Popup;
+        }
+        
+        if (Resizable && Bordered)
+        {
+            style |= (uint) WindowStyleFlags.ThickFrame;
+        }
+
+        if (Maximized)
+        {
+            style |= (uint) WindowStyleFlags.Maximize;
+        }
+
+        if (SystemMenu)
+        {
+            style |= (uint) WindowStyleFlags.SystemMenu;
+        }
+
+
+        if (Caption)
+        {
+            style |= (uint) WindowStyleFlags.Caption;
+        }
+
+
+        if (Overlapped)
+        {
+            style |= (uint) WindowStyleFlags.Overlapped;
+        }
+
+        if (MinimizeBox && Caption)
+        {
+            style |= (uint) WindowStyleFlags.MinimizeBox;
+        }
+
+
+        if (MaximizeBox && Caption)
+        {
+            style |= (uint) WindowStyleFlags.MaximizeBox;
+        }
+
         return style;
     }
 
