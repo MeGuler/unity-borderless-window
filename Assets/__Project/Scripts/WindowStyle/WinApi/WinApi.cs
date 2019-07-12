@@ -15,28 +15,35 @@ public class WinApi
     #region ShowWindow
 
     [DllImport("user32.dll")]
-    public static extern bool ShowWindow(IntPtr handleWindow, int flag);
+    public static extern bool ShowWindow(IntPtr window, int flag);
+
+    #endregion
+    
+    #region LockWindowUpdate
+
+    [DllImport("user32.dll")]
+    public static extern bool LockWindowUpdate(IntPtr window);
 
     #endregion
 
     #region GetWindowRect
 
     [DllImport("user32.dll")]
-    public static extern bool GetWindowRect(IntPtr handleWindow, out WindowRect rect);
+    public static extern bool GetWindowRect(IntPtr window, out WindowRect rect);
 
     #endregion
 
     #region MoveWindow
 
     [DllImport("user32.dll")]
-    public static extern bool MoveWindow(IntPtr handleWindow, int x, int y, int width, int height, bool repaint);
+    public static extern bool MoveWindow(IntPtr window, int x, int y, int width, int height, bool repaint);
 
     #endregion
 
     #region SetWindowPosition
 
     [DllImport("user32.dll", EntryPoint = "SetWindowPos")]
-    public static extern IntPtr SetWindowPos(IntPtr handleWindow, int insertAfter, int x, int y, int width,
+    public static extern IntPtr SetWindowPos(IntPtr window, int insertAfter, int x, int y, int width,
         int height,
         uint flags);
 
@@ -45,14 +52,14 @@ public class WinApi
     #region GetWindowLong
 
     [DllImport("user32.dll", EntryPoint = "GetWindowLong")]
-    private static extern IntPtr GetWindowLongPtr32(IntPtr hWnd, int nIndex);
+    private static extern IntPtr GetWindowLongPtr32(IntPtr window, int windowLongIndex);
 
     [DllImport("user32.dll", EntryPoint = "GetWindowLongPtr")]
-    private static extern IntPtr GetWindowLongPtr64(IntPtr hWnd, int nIndex);
+    private static extern IntPtr GetWindowLongPtr64(IntPtr window, int windowLongIndex);
 
-    public static IntPtr GetWindowLongPtr(IntPtr hWnd, int nIndex)
+    public static IntPtr GetWindowLongPtr(IntPtr window, int windowLongIndex)
     {
-        return IntPtr.Size == 8 ? GetWindowLongPtr64(hWnd, nIndex) : GetWindowLongPtr32(hWnd, nIndex);
+        return IntPtr.Size == 8 ? GetWindowLongPtr64(window, windowLongIndex) : GetWindowLongPtr32(window, windowLongIndex);
     }
 
     #endregion
@@ -60,16 +67,16 @@ public class WinApi
     #region SetWindowLong
 
     [DllImport("user32.dll", EntryPoint = "SetWindowLong")]
-    private static extern int SetWindowLong32(HandleRef hWnd, int nIndex, int dwNewLong);
+    private static extern int SetWindowLong32(HandleRef window, int windowLongIndex, int windowStyleFlags);
 
     [DllImport("user32.dll", EntryPoint = "SetWindowLongPtr")]
-    private static extern IntPtr SetWindowLongPtr64(HandleRef hWnd, int nIndex, IntPtr dwNewLong);
+    private static extern IntPtr SetWindowLongPtr64(HandleRef window, int windowLongIndex, IntPtr windowStyleFlags);
 
-    public static IntPtr SetWindowLongPtr(HandleRef hWnd, int nIndex, IntPtr dwNewLong)
+    public static IntPtr SetWindowLongPtr(HandleRef window, int windowLongIndex, IntPtr windowStyleFlags)
     {
         return IntPtr.Size == 8
-            ? SetWindowLongPtr64(hWnd, nIndex, dwNewLong)
-            : new IntPtr(SetWindowLong32(hWnd, nIndex, dwNewLong.ToInt32()));
+            ? SetWindowLongPtr64(window, windowLongIndex, windowStyleFlags)
+            : new IntPtr(SetWindowLong32(window, windowLongIndex, windowStyleFlags.ToInt32()));
     }
 
     #endregion
@@ -77,28 +84,28 @@ public class WinApi
     #region DefWindowProc
 
     [DllImport("user32.dll", EntryPoint = "DefWindowProcA")]
-    public static extern IntPtr DefWindowProc(IntPtr hWnd, uint wMsg, IntPtr wParam, IntPtr lParam);
+    public static extern IntPtr DefWindowProc(IntPtr window, uint message, IntPtr wParam, IntPtr lParam);
 
     #endregion
 
     #region EndDialog
     
     [DllImport("user32.dll")]
-    public static extern bool EndDialog(IntPtr hDlg, IntPtr nResult);
+    public static extern bool EndDialog(IntPtr window, IntPtr nResult);
     
     #endregion
     
     #region BeginPaint
 
     [DllImport("user32.dll")]
-    public static extern IntPtr BeginPaint(IntPtr hwnd, out PAINTSTRUCT lpPaint);
+    public static extern IntPtr BeginPaint(IntPtr window, out PAINTSTRUCT lpPaint);
     
     #endregion
     
     #region EndPaint
 
     [DllImport("user32.dll")]
-    public static extern bool EndPaint(IntPtr hWnd, [In] ref PAINTSTRUCT lpPaint);
+    public static extern bool EndPaint(IntPtr window, [In] ref PAINTSTRUCT lpPaint);
     
     #endregion
 

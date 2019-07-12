@@ -1,4 +1,5 @@
 using System;
+using System.Data.Common;
 using System.Drawing;
 using System.Runtime.InteropServices;
 using System.Security.Permissions;
@@ -7,15 +8,17 @@ using Color = UnityEngine.Color;
 
 public class WindowManager
 {
-    public static HandleRef HandledWindow;
-    private static IntPtr _oldWindowProcessesPtr;
-    private static IntPtr _newWindowProcessesPtr;
-    private static WndProcDelegate _newWindowProcesses;
+    //public static HandleRef HandledWindow;
+//    private static IntPtr _oldWindowProcessesPtr;
+//    private static IntPtr _newWindowProcessesPtr;
+//    private static WndProcDelegate _newWindowProcesses;
 
     public static Vector4Int BorderSize;
+    public static Vector2Int AspectRatio;
     public static Vector2Int MinWindowSize;
     public static Vector2Int MaxWindowSize;
 
+    public static bool KeepAspectRatio;
     public static bool Resizable;
     public static bool Bordered = true;
     public static bool Maximized = false;
@@ -23,18 +26,21 @@ public class WindowManager
     public static bool Overlapped = true;
     public static bool Caption = true;
     public static bool SystemMenu = true;
-
     public static bool MinimizeBox = true;
     public static bool MaximizeBox = true;
 
+
+    public static bool LockedWindowUpdate;
 
     private static readonly Vector2Int DefaultMinSize = new Vector2Int(50, 50);
 
     public static void Init
     (
         Vector4Int borderSize,
+        Vector2Int aspectRatio,
         Vector2Int minWindowSize,
         Vector2Int maxWindowSize,
+        bool keepAspectRatio,
         bool resizable,
         bool bordered,
         bool maximized,
@@ -47,10 +53,11 @@ public class WindowManager
     )
     {
         BorderSize = borderSize;
+        AspectRatio = aspectRatio;
         MinWindowSize = minWindowSize;
         MaxWindowSize = maxWindowSize;
 
-
+        KeepAspectRatio = keepAspectRatio;
         Resizable = resizable;
         Bordered = bordered;
         Maximized = maximized;
@@ -61,10 +68,10 @@ public class WindowManager
         MinimizeBox = minimizeBox;
         MaximizeBox = maximizeBox;
 
-        HandledWindow = new HandleRef(null, WinApi.GetActiveWindow());
-        _newWindowProcesses = WindowProcesses;
-        _newWindowProcessesPtr = Marshal.GetFunctionPointerForDelegate(_newWindowProcesses);
-        _oldWindowProcessesPtr = WinApi.SetWindowLongPtr(HandledWindow, -4, _newWindowProcessesPtr);
+//        HandledWindow = new HandleRef(null, WinApi.GetActiveWindow());
+//        _newWindowProcesses = WindowProcesses;
+//        _newWindowProcessesPtr = Marshal.GetFunctionPointerForDelegate(_newWindowProcesses);
+//        _oldWindowProcessesPtr = WinApi.SetWindowLongPtr(HandledWindow, -4, _newWindowProcessesPtr);
 
 
         #region Checksize Size
@@ -117,29 +124,29 @@ public class WindowManager
         UpdateWindowStyle();
     }
 
-    private static void Term()
-    {
-        WinApi.SetWindowLongPtr(HandledWindow, -4, _oldWindowProcessesPtr);
-        HandledWindow = new HandleRef(null, IntPtr.Zero);
-        _oldWindowProcessesPtr = IntPtr.Zero;
-        _newWindowProcessesPtr = IntPtr.Zero;
-        _newWindowProcesses = null;
-    }
+//    private static void Term()
+//    {
+//        WinApi.SetWindowLongPtr(HandledWindow, -4, _oldWindowProcessesPtr);
+//        HandledWindow = new HandleRef(null, IntPtr.Zero);
+//        _oldWindowProcessesPtr = IntPtr.Zero;
+//        _newWindowProcessesPtr = IntPtr.Zero;
+//        _newWindowProcesses = null;
+//    }
 
 
-    ~WindowManager()
-    {
-        Term();
-    }
+//    ~WindowManager()
+//    {
+//        Term();
+//    }
 
 
     [PermissionSet(SecurityAction.Demand, Name = "FullTrust")]
     private static IntPtr WindowProcesses(IntPtr handleWindow, uint message, IntPtr wParam, IntPtr lParam)
     {
-        if (message == (uint) WindowMessages.NCDESTROY || message == (uint) WindowMessages.WINDOWPOSCHANGING)
-        {
-            Term();
-        }
+//        if (message == (uint) WindowMessages.NCDESTROY || message == (uint) WindowMessages.WINDOWPOSCHANGING)
+//        {
+//            Term();
+//        }
 
         Debug.Log((WindowMessages) message);
 
@@ -195,12 +202,36 @@ public class WindowManager
         return (IntPtr) 0;
     }
 
+    public static void LockWindowUpdate(bool lockValue)
+    {
+        if (lockValue)
+        {
+            if (!LockedWindowUpdate)
+            {
+                var activeWindow = WinApi.GetActiveWindow();
+                WinApi.LockWindowUpdate(activeWindow);
+                LockedWindowUpdate = true;
+            }
+        }
+        else
+        {
+            if (LockedWindowUpdate)
+            {
+                WinApi.LockWindowUpdate(IntPtr.Zero);
+                LockedWindowUpdate = false;
+            }
+        }
+    }
+
     public static void UpdateWindowStyle()
     {
         var style = GetWindowStyleFlags();
+        var extendedStyle = GetExtendedWindowStyleFlags();
 
-        WinApi.SetWindowLongPtr(HandledWindow, (int) WindowLongIndex.Style, (IntPtr) style);
-        WinApi.SetWindowLongPtr(HandledWindow, (int) WindowLongIndex.ExtendedStyle, (IntPtr) 0);
+       var handledWindow = new HandleRef(null, WinApi.GetActiveWindow());
+        
+        WinApi.SetWindowLongPtr(handledWindow, (int) WindowLongIndex.Style, (IntPtr) style);
+        WinApi.SetWindowLongPtr(handledWindow, (int) WindowLongIndex.ExtendedStyle, (IntPtr) 0);
 
 //        var lStyle = (uint)WinApi.GetWindowLongPtr(HandledWindow.Handle, (int)WindowLongIndex.Style);
 //        lStyle &= ~(
@@ -280,7 +311,8 @@ public class WindowManager
 //                             (int) SetWindowPosFlags.FrameChanged;
 
 
-        WinApi.SetWindowPos(HandledWindow.Handle, 0, x, y, width, height, message);
+        var activeWindow = WinApi.GetActiveWindow();
+        WinApi.SetWindowPos(activeWindow, 0, x, y, width, height, message);
     }
 
     public static Rect GetWindowRect()
@@ -306,7 +338,6 @@ public class WindowManager
         return windowRect;
     }
 
-
     public static uint GetWindowStyleFlags()
     {
         uint style = 0;
@@ -323,9 +354,9 @@ public class WindowManager
         }
         else
         {
-            style |= (uint) WindowStyleFlags.Popup;
+            //style |= (uint) WindowStyleFlags.Popup;
         }
-        
+
         if (Resizable && Bordered)
         {
             style |= (uint) WindowStyleFlags.ThickFrame;
@@ -366,6 +397,66 @@ public class WindowManager
 
         return style;
     }
+    
+    public static uint GetExtendedWindowStyleFlags()
+    {
+        uint style = 0;
+//
+//        if (Visible)
+//        {
+//            style |= (uint) WindowStyleFlags.;
+//        }
+//
+//
+//        if (Bordered)
+//        {
+//            style |= (uint) WindowStyleFlags.Border;
+//        }
+//        else
+//        {
+//            //style |= (uint) WindowStyleFlags.Popup;
+//        }
+//
+//        if (Resizable && Bordered)
+//        {
+//            style |= (uint) WindowStyleFlags.ThickFrame;
+//        }
+//
+//        if (Maximized)
+//        {
+//            style |= (uint) WindowStyleFlags.Maximize;
+//        }
+//
+//        if (SystemMenu)
+//        {
+//            style |= (uint) WindowStyleFlags.SystemMenu;
+//        }
+//
+//
+//        if (Caption)
+//        {
+//            style |= (uint) WindowStyleFlags.Caption;
+//        }
+//
+//
+//        if (Overlapped)
+//        {
+//            style |= (uint) WindowStyleFlags.Overlapped;
+//        }
+//
+//        if (MinimizeBox && Caption)
+//        {
+//            style |= (uint) WindowStyleFlags.MinimizeBox;
+//        }
+//
+//
+//        if (MaximizeBox && Caption)
+//        {
+//            style |= (uint) WindowStyleFlags.MaximizeBox;
+//        }
+
+        return style;
+    }
 
     #region Size
 
@@ -381,64 +472,192 @@ public class WindowManager
 
         var newWindowRect = GetWindowRect();
 
-        if (beginningCursorFlag == CursorPositionFlags.Left)
+
+        if (KeepAspectRatio)
         {
-            newWindowRect = WindowRectResizeLeft(beginningCursorEdgeDistance, windowRectPoints, globalCursorPosition,
-                newWindowRect);
+            float aspectSizeValue;
+            switch (beginningCursorFlag)
+            {
+                case CursorPositionFlags.Left:
+                case CursorPositionFlags.TopLeft:
+                case CursorPositionFlags.BottomLeft:
+                    newWindowRect = WindowRectResizeLeft
+                    (
+                        beginningCursorEdgeDistance,
+                        windowRectPoints,
+                        globalCursorPosition,
+                        newWindowRect
+                    );
+
+                    aspectSizeValue = newWindowRect.width / AspectRatio.x;
+                    newWindowRect.height = aspectSizeValue * AspectRatio.y;
+                    break;
+                case CursorPositionFlags.Right:
+                case CursorPositionFlags.BottomRight:
+                case CursorPositionFlags.TopRight:
+                    newWindowRect = WindowRectResizeRight
+                    (
+                        beginningCursorEdgeDistance,
+                        windowRectPoints,
+                        globalCursorPosition,
+                        newWindowRect
+                    );
+
+                    aspectSizeValue = newWindowRect.width / AspectRatio.x;
+                    newWindowRect.height = aspectSizeValue * AspectRatio.y;
+                    break;
+                case CursorPositionFlags.Top:
+                    newWindowRect = WindowRectResizeTop
+                    (
+                        beginningCursorEdgeDistance,
+                        windowRectPoints,
+                        globalCursorPosition,
+                        newWindowRect
+                    );
+
+                    aspectSizeValue = newWindowRect.height / AspectRatio.y;
+                    newWindowRect.width = aspectSizeValue * AspectRatio.x;
+                    break;
+                case CursorPositionFlags.Bottom:
+                    newWindowRect = WindowRectResizeBottom
+                    (
+                        beginningCursorEdgeDistance,
+                        windowRectPoints,
+                        globalCursorPosition,
+                        newWindowRect
+                    );
+
+                    aspectSizeValue = newWindowRect.height / AspectRatio.y;
+                    newWindowRect.width = aspectSizeValue * AspectRatio.x;
+                    break;
+            }
+        }
+        else
+        {
+            switch (beginningCursorFlag)
+            {
+                case CursorPositionFlags.Left:
+                {
+                    newWindowRect = WindowRectResizeLeft
+                    (
+                        beginningCursorEdgeDistance,
+                        windowRectPoints,
+                        globalCursorPosition,
+                        newWindowRect
+                    );
+                    break;
+                }
+
+                case CursorPositionFlags.Right:
+                {
+                    newWindowRect = WindowRectResizeRight
+                    (
+                        beginningCursorEdgeDistance,
+                        windowRectPoints,
+                        globalCursorPosition,
+                        newWindowRect
+                    );
+                    break;
+                }
+
+                case CursorPositionFlags.Top:
+                {
+                    newWindowRect = WindowRectResizeTop
+                    (
+                        beginningCursorEdgeDistance,
+                        windowRectPoints,
+                        globalCursorPosition,
+                        newWindowRect
+                    );
+                    break;
+                }
+
+                case CursorPositionFlags.Bottom:
+                {
+                    newWindowRect = WindowRectResizeBottom
+                    (
+                        beginningCursorEdgeDistance,
+                        windowRectPoints,
+                        globalCursorPosition,
+                        newWindowRect
+                    );
+                    break;
+                }
+
+                case CursorPositionFlags.TopLeft:
+                    newWindowRect = WindowRectResizeLeft
+                    (beginningCursorEdgeDistance,
+                        windowRectPoints,
+                        globalCursorPosition,
+                        newWindowRect
+                    );
+                    newWindowRect = WindowRectResizeTop
+                    (
+                        beginningCursorEdgeDistance,
+                        windowRectPoints,
+                        globalCursorPosition,
+                        newWindowRect
+                    );
+                    break;
+                case CursorPositionFlags.TopRight:
+                    newWindowRect = WindowRectResizeRight
+                    (
+                        beginningCursorEdgeDistance,
+                        windowRectPoints,
+                        globalCursorPosition,
+                        newWindowRect
+                    );
+                    newWindowRect = WindowRectResizeTop
+                    (
+                        beginningCursorEdgeDistance,
+                        windowRectPoints,
+                        globalCursorPosition,
+                        newWindowRect
+                    );
+                    break;
+                case CursorPositionFlags.BottomLeft:
+                    newWindowRect = WindowRectResizeLeft
+                    (
+                        beginningCursorEdgeDistance,
+                        windowRectPoints,
+                        globalCursorPosition,
+                        newWindowRect
+                    );
+
+                    newWindowRect = WindowRectResizeBottom
+                    (
+                        beginningCursorEdgeDistance,
+                        windowRectPoints,
+                        globalCursorPosition,
+                        newWindowRect
+                    );
+                    break;
+                case CursorPositionFlags.BottomRight:
+                    newWindowRect = WindowRectResizeRight
+                    (
+                        beginningCursorEdgeDistance,
+                        windowRectPoints,
+                        globalCursorPosition,
+                        newWindowRect
+                    );
+                    newWindowRect = WindowRectResizeBottom
+                    (
+                        beginningCursorEdgeDistance,
+                        windowRectPoints,
+                        globalCursorPosition,
+                        newWindowRect
+                    );
+                    break;
+            }
         }
 
-        else if (beginningCursorFlag == CursorPositionFlags.Right)
-        {
-            newWindowRect = WindowRectResizeRight(beginningCursorEdgeDistance, windowRectPoints, globalCursorPosition,
-                newWindowRect);
-        }
-
-
-        else if (beginningCursorFlag == CursorPositionFlags.Top)
-        {
-            newWindowRect = WindowRectResizeTop(beginningCursorEdgeDistance, windowRectPoints, globalCursorPosition,
-                newWindowRect);
-        }
-
-        else if (beginningCursorFlag == CursorPositionFlags.Bottom)
-        {
-            newWindowRect = WindowRectResizeBottom(beginningCursorEdgeDistance, windowRectPoints, globalCursorPosition,
-                newWindowRect);
-        }
-
-        else if (beginningCursorFlag == CursorPositionFlags.TopLeft)
-        {
-            newWindowRect = WindowRectResizeLeft(beginningCursorEdgeDistance, windowRectPoints, globalCursorPosition,
-                newWindowRect);
-            newWindowRect = WindowRectResizeTop(beginningCursorEdgeDistance, windowRectPoints, globalCursorPosition,
-                newWindowRect);
-        }
-
-        else if (beginningCursorFlag == CursorPositionFlags.TopRight)
-        {
-            newWindowRect = WindowRectResizeRight(beginningCursorEdgeDistance, windowRectPoints, globalCursorPosition,
-                newWindowRect);
-            newWindowRect = WindowRectResizeTop(beginningCursorEdgeDistance, windowRectPoints, globalCursorPosition,
-                newWindowRect);
-        }
-
-        else if (beginningCursorFlag == CursorPositionFlags.BottomLeft)
-        {
-            newWindowRect = WindowRectResizeLeft(beginningCursorEdgeDistance, windowRectPoints, globalCursorPosition,
-                newWindowRect);
-            newWindowRect = WindowRectResizeBottom(beginningCursorEdgeDistance, windowRectPoints, globalCursorPosition,
-                newWindowRect);
-        }
-
-        else if (beginningCursorFlag == CursorPositionFlags.BottomRight)
-        {
-            newWindowRect = WindowRectResizeRight(beginningCursorEdgeDistance, windowRectPoints, globalCursorPosition,
-                newWindowRect);
-            newWindowRect = WindowRectResizeBottom(beginningCursorEdgeDistance, windowRectPoints, globalCursorPosition,
-                newWindowRect);
-        }
 
         MoveWindow(newWindowRect);
+    }
+
+
+    private static void WindowSizeChangeKeepAspect()
+    {
     }
 
     private static Rect CheckWindowSize(Rect windowRect)
@@ -482,7 +701,7 @@ public class WindowManager
         {
             newWindowRect.height -= distance;
         }
-        //Bottom Collapse
+        //Bottom Shrink
         else if (globalClickPoint < globalCursorPosition.y)
         {
             newWindowRect.height += distance;
@@ -519,7 +738,7 @@ public class WindowManager
                 newWindowRect.y += difference;
             }
         }
-        //Top Collapse
+        //Top Shrink
         else if (globalClickPoint < globalCursorPosition.y)
         {
 //            newWindowRect.y += distance;
@@ -551,7 +770,7 @@ public class WindowManager
         {
             newWindowRect.width -= distance;
         }
-        //Right Collapse
+        //Right Shrink
         else if (globalClickPoint < globalCursorPosition.x)
         {
             newWindowRect.width += distance;
@@ -563,8 +782,6 @@ public class WindowManager
     private static Rect WindowRectResizeLeft(Vector2 beginningCursorEdgeDistance, WindowRect windowRectPoints,
         Vector2 globalCursorPosition, Rect newWindowRect)
     {
-        //todo: check max size for unexpected movement
-
         var globalClickPoint = windowRectPoints.Left + beginningCursorEdgeDistance.x;
         var distance = Mathf.Abs(globalCursorPosition.x - globalClickPoint);
         //Left Expand
@@ -588,7 +805,7 @@ public class WindowManager
             }
         }
 
-        //Left Collapse
+        //Left Shrink
         else if (globalClickPoint < globalCursorPosition.x)
         {
             if (newWindowRect.width > MinWindowSize.x)

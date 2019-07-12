@@ -1,16 +1,21 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.UI;
 
 
 public class WindowStyle : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
 {
     [Header("Window Settings")] public Vector4Int borderSize;
+    public Vector2Int aspectRatio;
     public Vector2Int defaultWindowSize;
     public Vector2Int minWindowSize;
     public Vector2Int maxWindowSize;
 
+
+    public bool keepAspectRatio;
     public bool resizable = true;
     public bool bordered = false;
     public bool maximized = false;
@@ -18,28 +23,39 @@ public class WindowStyle : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
     public bool overlapped = false;
     public bool caption = false;
     public bool systemMenu = false;
-    public bool minimizeBox =false;
+    public bool minimizeBox = false;
     public bool maximizeBox = false;
 
     [Header("Cursors")] public List<CursorData> cursors = new List<CursorData>();
 
+
+    [Header("Window Icons")] public Image maximizeIcon;
+
+    [Header("Window Icons Sprites")] public Sprite maximizeIconMaximized;
+    public Sprite maximizeIconNotMaximized;
 
     private bool _isMouseDown;
 
     private string _currentCursorName;
     private string _previousCursorName;
 
-    private Vector2 _beginninfCursorEdgeDistance;
+    private Vector2 _beginningCursorEdgeDistance;
     private CursorPositionFlags _mouseDownCursorFlag;
 
 
+    private int counterDown;
+    private int counterUp;
+    
+    
     private void Awake()
     {
         WindowManager.Init
         (
             borderSize,
+            aspectRatio,
             minWindowSize,
             maxWindowSize,
+            keepAspectRatio,
             resizable,
             bordered,
             maximized,
@@ -60,13 +76,16 @@ public class WindowStyle : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
         {
             if (_isMouseDown)
             {
-                WindowManager.WindowSizeChange(_beginninfCursorEdgeDistance, _mouseDownCursorFlag);
+                WindowManager.WindowSizeChange(_beginningCursorEdgeDistance, _mouseDownCursorFlag);
             }
             else
             {
                 SetCursorFlagIcon();
             }
         }
+        
+        GUI.Label(new Rect(10, 10, 100, 20), counterDown.ToString());
+        GUI.Label(new Rect(10, 50, 100, 20), counterUp.ToString());
     }
 
     private void SetCursorFlagIcon()
@@ -100,17 +119,10 @@ public class WindowStyle : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
         {
             _previousCursorName = _currentCursorName;
 
-            if (_currentCursorName == "Normal")
+            var cursor = cursors.First(x => x.name == _currentCursorName);
+            if (cursor != null)
             {
-                Cursor.SetCursor(null, Vector2.zero, CursorMode.Auto);
-            }
-            else
-            {
-                var cursor = cursors.First(x => x.name == _currentCursorName);
-                if (cursor != null)
-                {
-                    Cursor.SetCursor(cursor.image, cursor.offset, CursorMode.Auto);
-                }
+                Cursor.SetCursor(cursor.image, cursor.offset, CursorMode.Auto);
             }
         }
     }
@@ -120,8 +132,11 @@ public class WindowStyle : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
     {
         if (WindowManager.Resizable)
         {
-            _beginninfCursorEdgeDistance = CursorManager.GetEdgeDistance(out _mouseDownCursorFlag);
+            _beginningCursorEdgeDistance = CursorManager.GetEdgeDistance(out _mouseDownCursorFlag);
             _isMouseDown = true;
+            WindowManager.LockWindowUpdate(true);
+            Debug.Log("Down");
+            counterDown++;
         }
     }
 
@@ -130,9 +145,12 @@ public class WindowStyle : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
     {
         if (WindowManager.Resizable)
         {
-            _beginninfCursorEdgeDistance = CursorManager.GetEdgeDistance(out _mouseDownCursorFlag);
+            _beginningCursorEdgeDistance = CursorManager.GetEdgeDistance(out _mouseDownCursorFlag);
             _mouseDownCursorFlag = CursorPositionFlags.Main;
             _isMouseDown = false;
+            WindowManager.LockWindowUpdate(false);
+            Debug.Log("Up");
+            counterUp++;
         }
     }
 
@@ -148,14 +166,12 @@ public class WindowStyle : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
         {
             WindowManager.Bordered = true;
             WindowManager.UpdateWindowStyle();
-            //rect.width -= borderSize.x + borderSize.z;
             rect.height -= borderSize.y + borderSize.w;
         }
         else
         {
             WindowManager.Bordered = false;
             WindowManager.UpdateWindowStyle();
-            //rect.width += borderSize.x + borderSize.z;
             rect.height += borderSize.y + borderSize.w;
         }
 
@@ -184,11 +200,15 @@ public class WindowStyle : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
 
     public void Maximize()
     {
-        EventSystem.current.SetSelectedGameObject(null);
+//        EventSystem.current.SetSelectedGameObject(null);
+        maximized = !maximized;
 
-        WindowManager.ShowWindow(WindowManager.Maximized
-            ? WindowShowStyle.Restore
-            : WindowShowStyle.Maximize);
+        if (maximizeIcon != null)
+        {
+            maximizeIcon.sprite = maximized ? maximizeIconMaximized : maximizeIconNotMaximized;
+        }
+
+        WindowManager.ShowWindow(maximized ? WindowShowStyle.Maximize : WindowShowStyle.Restore);
     }
 
     public void ResizableBorderless()
