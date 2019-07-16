@@ -8,6 +8,8 @@ using UnityEngine.UI;
 
 public class WindowStyle : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
 {
+    public static WindowStyle Instance;
+    
     [Header("Window Settings")] public Vector4Int borderSize;
     public Vector2Int aspectRatio;
     public Vector2Int defaultWindowSize;
@@ -41,14 +43,25 @@ public class WindowStyle : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
 
     private Vector2 _beginningCursorEdgeDistance;
     private CursorPositionFlags _mouseDownCursorFlag;
+    private Rect _lastScreenRect;
 
-
+    //Will be Delete
     private int counterDown;
     private int counterUp;
     
     
     private void Awake()
     {
+        if (Instance == null)
+        {
+            Instance = this;
+        }
+        else
+        {
+            Destroy(this);
+            return;
+        }
+        
         WindowManager.Init
         (
             borderSize,
@@ -134,8 +147,8 @@ public class WindowStyle : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
         {
             _beginningCursorEdgeDistance = CursorManager.GetEdgeDistance(out _mouseDownCursorFlag);
             _isMouseDown = true;
-            WindowManager.LockWindowUpdate(true);
-            Debug.Log("Down");
+//            WindowManager.LockWindowUpdate(true);
+//            Debug.Log("Down");
             counterDown++;
         }
     }
@@ -148,10 +161,59 @@ public class WindowStyle : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
             _beginningCursorEdgeDistance = CursorManager.GetEdgeDistance(out _mouseDownCursorFlag);
             _mouseDownCursorFlag = CursorPositionFlags.Main;
             _isMouseDown = false;
-            WindowManager.LockWindowUpdate(false);
-            Debug.Log("Up");
+//            WindowManager.LockWindowUpdate(false);
+//            Debug.Log("Up");
             counterUp++;
         }
+    }
+    
+    public void Maximize(bool value)
+    {
+//        EventSystem.current.SetSelectedGameObject(null);
+
+        WindowManager.Maximized = value;
+
+        if (maximizeIcon != null)
+        {
+            maximizeIcon.sprite = WindowManager.Maximized ? maximizeIconMaximized : maximizeIconNotMaximized;
+        }
+
+        if (!WindowManager.Bordered)
+        {
+            var tempRect = WindowManager.GetWindowRect();
+            
+            Debug.Log(tempRect);
+
+            if (!WindowManager.Maximized)
+            {
+                if (_lastScreenRect.width == 0)
+                {
+                    _lastScreenRect.width = defaultWindowSize.x;
+                    _lastScreenRect.height = defaultWindowSize.y;
+                }
+                
+                WindowManager.MoveWindow(_lastScreenRect, true);
+            }
+            else
+            {
+                var rect = new Rect
+                {
+                    x = 0,
+                    y = 0,
+                    width = Screen.currentResolution.width,
+                    height = Screen.currentResolution.height
+                };
+                
+                WindowManager.MoveWindow(rect, false);
+            }
+
+            _lastScreenRect = tempRect;
+        }
+        else
+        {
+            WindowManager.ShowWindow(WindowManager.Maximized ? WindowShowStyle.Maximize : WindowShowStyle.Restore);
+        }
+
     }
 
     #region UI Fonctions
@@ -175,7 +237,7 @@ public class WindowStyle : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
             rect.height += borderSize.y + borderSize.w;
         }
 
-        WindowManager.MoveWindow(rect);
+        WindowManager.MoveWindow(rect, true);
     }
 
     public void ResetWindowSize()
@@ -185,7 +247,7 @@ public class WindowStyle : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
         rect.width = defaultWindowSize.x;
         rect.height = defaultWindowSize.y;
 
-        WindowManager.MoveWindow(rect);
+        WindowManager.MoveWindow(rect, true);
     }
 
     public void QuitApplication()
@@ -201,14 +263,11 @@ public class WindowStyle : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
     public void Maximize()
     {
 //        EventSystem.current.SetSelectedGameObject(null);
-        maximized = !maximized;
+        
 
-        if (maximizeIcon != null)
-        {
-            maximizeIcon.sprite = maximized ? maximizeIconMaximized : maximizeIconNotMaximized;
-        }
+        WindowManager.Maximized = !WindowManager.Maximized;
 
-        WindowManager.ShowWindow(maximized ? WindowShowStyle.Maximize : WindowShowStyle.Restore);
+        Maximize(WindowManager.Maximized);
     }
 
     public void ResizableBorderless()

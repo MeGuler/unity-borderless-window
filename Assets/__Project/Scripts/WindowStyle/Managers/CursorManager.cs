@@ -1,6 +1,6 @@
 using System;
+using Borderless;
 using UnityEngine;
-
 public static class CursorManager
 {
     public static Vector2 GetCursorPosition()

@@ -3,6 +3,7 @@ using System;
 using System.Drawing;
 using System.Runtime.InteropServices;
 using System.Security.Permissions;
+using Borderless;
 using XGraphic = System.Drawing.Graphics;
 using Color = System.Drawing.Color;
 

@@ -3,6 +3,7 @@ using System.Data.Common;
 using System.Drawing;
 using System.Runtime.InteropServices;
 using System.Security.Permissions;
+using Borderless;
 using UnityEngine;
 using Color = UnityEngine.Color;
 
@@ -228,10 +229,10 @@ public class WindowManager
         var style = GetWindowStyleFlags();
         var extendedStyle = GetExtendedWindowStyleFlags();
 
-       var handledWindow = new HandleRef(null, WinApi.GetActiveWindow());
-        
+        var handledWindow = new HandleRef(null, WinApi.GetActiveWindow());
+
         WinApi.SetWindowLongPtr(handledWindow, (int) WindowLongIndex.Style, (IntPtr) style);
-        WinApi.SetWindowLongPtr(handledWindow, (int) WindowLongIndex.ExtendedStyle, (IntPtr) 0);
+//        MyWinApi.SetWindowLongPtr(handledWindow, (int) WindowLongIndex.ExtendedStyle, (IntPtr) 0);
 
 //        var lStyle = (uint)WinApi.GetWindowLongPtr(HandledWindow.Handle, (int)WindowLongIndex.Style);
 //        lStyle &= ~(
@@ -271,11 +272,17 @@ public class WindowManager
         WinApi.ShowWindow(activeWindow, status);
     }
 
-    public static void MoveWindow(Rect rect)
+    public static void MoveWindow(Rect rect, bool checkLimits)
     {
+        SetWindowPos(rect, checkLimits);
+        return;
+
         var activeWindow = WinApi.GetActiveWindow();
 
-        rect = CheckWindowSize(rect);
+        if (checkLimits)
+        {
+            rect = CheckWindowSize(rect);
+        }
 
         var x = (int) rect.x;
         var y = (int) rect.y;
@@ -283,35 +290,31 @@ public class WindowManager
         var height = (int) rect.height;
 
 
-        WinApi.MoveWindow(activeWindow, x, y, width, height, true);
+        WinApi.MoveWindow(activeWindow, x, y, width, height, false);
     }
 
 
-    public static void SetWindowPos(Rect rect)
+    public static void SetWindowPos(Rect rect, bool checkLimits)
     {
-        rect = CheckWindowSize(rect);
+        var activeWindow = WinApi.GetActiveWindow();
+
+        if (checkLimits)
+        {
+            rect = CheckWindowSize(rect);
+        }
+
 
         var x = (int) rect.x;
         var y = (int) rect.y;
         var width = (int) rect.width;
         var height = (int) rect.height;
 
-        Bordered = false;
         UpdateWindowStyle();
 
-        const uint message = (int) SetWindowPosFlags.NoZOrder |
-                             (int) SetWindowPosFlags.NoOwnerZOrder |
-                             (int) SetWindowPosFlags.AsyncWindowPos |
-                             (int) SetWindowPosFlags.NoReDraw |
-                             (int) SetWindowPosFlags.NoCopyBits;
-//                             (int) SetWindowPosFlags.AsyncWindowPos|
-//                             (int) SetWindowPosFlags.DrawFrame|
-//                             (int) SetWindowPosFlags.NoMove |
-//                             (int) SetWindowPosFlags.NoSize |
-//                             (int) SetWindowPosFlags.FrameChanged;
+        const uint message = (int) SetWindowPosFlags.ShowWindow /*|
+                             (int) SetWindowPosFlags.AsyncWindowPos*/;
 
 
-        var activeWindow = WinApi.GetActiveWindow();
         WinApi.SetWindowPos(activeWindow, 0, x, y, width, height, message);
     }
 
@@ -397,11 +400,12 @@ public class WindowManager
 
         return style;
     }
-    
+
     public static uint GetExtendedWindowStyleFlags()
     {
         uint style = 0;
-//
+
+
 //        if (Visible)
 //        {
 //            style |= (uint) WindowStyleFlags.;
@@ -652,7 +656,7 @@ public class WindowManager
         }
 
 
-        MoveWindow(newWindowRect);
+        MoveWindow(newWindowRect, true);
     }
 
 
