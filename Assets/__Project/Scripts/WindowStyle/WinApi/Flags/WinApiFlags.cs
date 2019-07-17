@@ -13,6 +13,7 @@ public enum CursorPositionFlags
     BottomRight,
 }
 
+[Flags]
 public enum WindowStyleFlags : uint
 {
     Overlapped = 0x00000000,

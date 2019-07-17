@@ -1,76 +1,49 @@
 ﻿using UnityEngine;
 using UnityEngine.EventSystems;
 
-public class WindowMover : MonoBehaviour, IDragHandler
+public class WindowMover : MonoBehaviour, IDragHandler, IPointerDownHandler, IPointerUpHandler
 {
     private Vector2 _deltaValue = Vector2.zero;
-    
-    
-    
-    private bool _maximizedAfter;
-    private Rect _maximizedAfterRect;
-    
-    
-    
 
+    private Rect _rect;
+    
     public void OnDrag(PointerEventData eventData)
     {
         _deltaValue += eventData.delta;
 
         if (eventData.dragging)
         {
-            var windowRect = WindowManager.GetWindowRect();
-
-            var rect = new Rect
+            if (WindowManager.Maximized)
             {
-                x = windowRect.x + _deltaValue.x,
-                y = windowRect.y - _deltaValue.y,
-                width = windowRect.width,
-                height = windowRect.height
-            };
+                Debug.Log("Maximized");
+                var cursorPositionRelative = CursorManager.GetCursorPositionRelative();
+                var cursorPosition = CursorManager.GetCursorPosition();
 
-//            if (WindowManager.Maximized)
-//            {
-//                var cursorPositionRelative = CursorManager.GetCursorPositionRelative();
-//                var cursorPosition = CursorManager.GetCursorPosition();
-//
-//
-//                Debug.Log("Cursor Position: " + cursorPosition);
-//                Debug.Log("Maximized Window Rect: " + windowRect);
-//
-//                var percent = cursorPositionRelative.x / windowRect.width;
-//                Debug.Log("Percent: " + percent);
-//
-//                WindowStyle.Instance.Maximize(false);
-//
-//                var normalRect = WindowManager.GetWindowRect();
-//                Debug.Log("Normal Window Rect: " + normalRect);
-//
-//
-//                var offset = normalRect.width * percent;
-//                Debug.Log("Offset: " + offset);
-//
-//                normalRect.position = new Vector2(cursorPosition.x - offset, rect.position.y);
-//                Debug.Log("Rect Position : " + rect.position);
-//                _maximizedAfter = true;
-//
-//                _maximizedAfterRect = normalRect;
-//                return;
-//            }
-//
-//            
-//            if (_maximizedAfter)
-//            {
-//                _maximizedAfter = false;
-//                rect = _maximizedAfterRect; 
-//                WindowManager.MoveWindow(rect);
-//                Debug.Log(rect);
-//                return;
-//            }
+                var percent = cursorPositionRelative.x / _rect.width;
+
+                WindowStyle.Instance.Maximize(false);
+
+                var normalRect = WindowManager.GetWindowRect();
+
+                var offset = normalRect.width * percent;
+                normalRect.position = new Vector2(cursorPosition.x - offset, normalRect.position.y);
+                
+                _rect = normalRect;
+            }
             
-            WindowManager.MoveWindow(rect, true);
-
-           
+            
+            _rect.x += _deltaValue.x;
+            _rect.y -= _deltaValue.y;
+            WindowManager.MoveWindow(_rect, false);
         }
+    }
+
+    public void OnPointerDown(PointerEventData eventData)
+    {
+        _rect = WindowManager.GetWindowRect();
+    }
+
+    public void OnPointerUp(PointerEventData eventData)
+    {
     }
 }

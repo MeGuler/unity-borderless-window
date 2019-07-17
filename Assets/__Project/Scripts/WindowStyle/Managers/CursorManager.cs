@@ -1,4 +1,5 @@
 using System;
+using System.Drawing;
 using Borderless;
 using UnityEngine;
 public static class CursorManager
@@ -31,6 +32,19 @@ public static class CursorManager
         {
             x = point.x - (int)windowRect.x,
             y = point.y - (int)windowRect.y
+        };
+        
+        return relativePoint;
+    }
+    
+    public static Point GetCursorPositionRelative(Point point)
+    {
+        var windowRect = WindowManager.GetWindowRect();
+
+        var relativePoint = new Point
+        {
+            X = point.X - (int)windowRect.x,
+            Y = point.Y - (int)windowRect.y
         };
         
         return relativePoint;

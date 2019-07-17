@@ -182,7 +182,6 @@ public class WindowStyle : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
         {
             var tempRect = WindowManager.GetWindowRect();
             
-            Debug.Log(tempRect);
 
             if (!WindowManager.Maximized)
             {

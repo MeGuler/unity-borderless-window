@@ -6,9 +6,9 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
-    path: Assets/__Project/Scenes/BorderlessManual.unity
-    guid: 7a56efe93a44b2543871d8076108f79f
+    path: Assets/__Project/Scenes/Borderless v2.unity
+    guid: 2c50c5bd59090a948b7b1d2c9e66b102
   - enabled: 1
-    path: Assets/__Project/Scenes/BorderlessWindows.unity
-    guid: e06705e51321f984fa02137b740a1f72
+    path: Assets/__Project/Scenes/Borderless.unity
+    guid: 7a56efe93a44b2543871d8076108f79f
   m_configObjects: {}

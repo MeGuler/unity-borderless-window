@@ -659,11 +659,6 @@ public class WindowManager
         MoveWindow(newWindowRect, true);
     }
 
-
-    private static void WindowSizeChangeKeepAspect()
-    {
-    }
-
     private static Rect CheckWindowSize(Rect windowRect)
     {
         if (windowRect.width < MinWindowSize.x)
