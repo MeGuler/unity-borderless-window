@@ -4,6 +4,7 @@
     <e p="C:\Users\Maritimetainer\.Rider2019.1\system\extResources" t="IncludeRecursive" />
     <e p="C:\Users\Maritimetainer\.Rider2019.1\system\resharper-host\local\Transient\ReSharperHost\v191\SolutionCaches\_unity-borderless-window.2074181361.00" t="ExcludeRecursive" />
     <e p="D:\Z - Works\Personel\unity-borderless-window" t="IncludeRecursive">
+      <e p="Assembly-CSharp-firstpass.csproj" t="IncludeRecursive" />
       <e p="Assembly-CSharp.csproj" t="IncludeRecursive" />
       <e p="Assets" t="Include">
         <e p="__Project" t="Include">
@@ -17,6 +18,7 @@
                 <e p="CursorManager.cs" t="Include" />
                 <e p="WindowManager.cs" t="Include" />
               </e>
+              <e p="TransparentWindow.cs" t="Include" />
               <e p="v2" t="Include">
                 <e p="BorderlessWindow.cs" t="Include" />
                 <e p="Window.cs" t="Include" />
@@ -32,6 +34,24 @@
               </e>
               <e p="WindowMover.cs" t="Include" />
               <e p="WindowStyle.cs" t="Include" />
+            </e>
+          </e>
+        </e>
+        <e p="Plugins" t="Include">
+          <e p="IngameDebugConsole" t="Include">
+            <e p="README.txt" t="Include" />
+            <e p="Scripts" t="Include">
+              <e p="CircularBuffer.cs" t="Include" />
+              <e p="ConsoleMethodAttribute.cs" t="Include" />
+              <e p="DebugLogConsole.cs" t="Include" />
+              <e p="DebugLogEntry.cs" t="Include" />
+              <e p="DebugLogIndexList.cs" t="Include" />
+              <e p="DebugLogItem.cs" t="Include" />
+              <e p="DebugLogLogcatListener.cs" t="Include" />
+              <e p="DebugLogManager.cs" t="Include" />
+              <e p="DebugLogPopup.cs" t="Include" />
+              <e p="DebugLogRecycledListView.cs" t="Include" />
+              <e p="DebugsOnScrollListener.cs" t="Include" />
             </e>
           </e>
         </e>

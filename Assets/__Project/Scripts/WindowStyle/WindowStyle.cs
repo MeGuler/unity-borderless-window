@@ -45,10 +45,7 @@ public class WindowStyle : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
     private CursorPositionFlags _mouseDownCursorFlag;
     private Rect _lastScreenRect;
 
-    //Will be Delete
-    private int counterDown;
-    private int counterUp;
-    
+    public GameObject blackPanel;
     
     private void Awake()
     {
@@ -85,7 +82,7 @@ public class WindowStyle : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
 
     private void OnGUI()
     {
-        if (WindowManager.Resizable && !WindowManager.Bordered)
+        if (WindowManager.Resizable && !WindowManager.Bordered && !WindowManager.Maximized)
         {
             if (_isMouseDown)
             {
@@ -96,9 +93,6 @@ public class WindowStyle : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
                 SetCursorFlagIcon();
             }
         }
-        
-        GUI.Label(new Rect(10, 10, 100, 20), counterDown.ToString());
-        GUI.Label(new Rect(10, 50, 100, 20), counterUp.ToString());
     }
 
     private void SetCursorFlagIcon()
@@ -149,7 +143,14 @@ public class WindowStyle : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
             _isMouseDown = true;
 //            WindowManager.LockWindowUpdate(true);
 //            Debug.Log("Down");
-            counterDown++;
+            if (!WindowManager.Bordered && !WindowManager.Maximized)
+            {
+                if (_mouseDownCursorFlag != CursorPositionFlags.Main)
+                {
+                    blackPanel.SetActive(true);
+                }
+            }
+
         }
     }
 
@@ -163,7 +164,8 @@ public class WindowStyle : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
             _isMouseDown = false;
 //            WindowManager.LockWindowUpdate(false);
 //            Debug.Log("Up");
-            counterUp++;
+
+            blackPanel.SetActive(false);
         }
     }
     
@@ -178,40 +180,40 @@ public class WindowStyle : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
             maximizeIcon.sprite = WindowManager.Maximized ? maximizeIconMaximized : maximizeIconNotMaximized;
         }
 
-        if (!WindowManager.Bordered)
-        {
-            var tempRect = WindowManager.GetWindowRect();
-            
-
-            if (!WindowManager.Maximized)
-            {
-                if (_lastScreenRect.width == 0)
-                {
-                    _lastScreenRect.width = defaultWindowSize.x;
-                    _lastScreenRect.height = defaultWindowSize.y;
-                }
-                
-                WindowManager.MoveWindow(_lastScreenRect, true);
-            }
-            else
-            {
-                var rect = new Rect
-                {
-                    x = 0,
-                    y = 0,
-                    width = Screen.currentResolution.width,
-                    height = Screen.currentResolution.height
-                };
-                
-                WindowManager.MoveWindow(rect, false);
-            }
-
-            _lastScreenRect = tempRect;
-        }
-        else
-        {
+//        if (!WindowManager.Bordered)
+//        {
+//            var tempRect = WindowManager.GetWindowRect();
+//            
+//
+//            if (!WindowManager.Maximized)
+//            {
+//                if (_lastScreenRect.width == 0)
+//                {
+//                    _lastScreenRect.width = defaultWindowSize.x;
+//                    _lastScreenRect.height = defaultWindowSize.y;
+//                }
+//                
+//                WindowManager.MoveWindow(_lastScreenRect, true);
+//            }
+//            else
+//            {
+//                var rect = new Rect
+//                {
+//                    x = 0,
+//                    y = 0,
+//                    width = Screen.currentResolution.width,
+//                    height = Screen.currentResolution.height
+//                };
+//                
+//                WindowManager.MoveWindow(rect, false);
+//            }
+//
+//            _lastScreenRect = tempRect;
+//        }
+//        else
+//        {
             WindowManager.ShowWindow(WindowManager.Maximized ? WindowShowStyle.Maximize : WindowShowStyle.Restore);
-        }
+//        }
 
     }
 

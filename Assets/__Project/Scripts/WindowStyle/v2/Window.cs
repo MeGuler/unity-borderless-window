@@ -2,6 +2,7 @@
 using System.Drawing;
 using System.Runtime.InteropServices;
 using System.Security.Permissions;
+using TMPro;
 using UnityEngine;
 using XGraphic = System.Drawing.Graphics;
 
@@ -11,10 +12,13 @@ namespace Borderless
     {
         #region Window Procedure
 
-        private HandleRef _handledWindow;
-        private IntPtr _oldWindowProcessesPtr;
-        private IntPtr _newWindowProcessesPtr;
-        private WndProcDelegate _newWindowProcesses;
+        protected HandleRef _handledWindow;
+        protected IntPtr _oldWindowProcessesPtr;
+        protected IntPtr _newWindowProcessesPtr;
+        protected WndProcDelegate _newWindowProcesses;
+
+        protected bool ClickThrough = true;
+        protected bool PreviousClickThrough = true;
 
         #endregion
 
@@ -28,7 +32,6 @@ namespace Borderless
         protected int CaptionHeight;
 
         #endregion
-
 
         protected virtual void Start()
         {
@@ -46,7 +49,6 @@ namespace Borderless
 
         protected virtual void InitializeWindowProcedure()
         {
-            Debug.Log("Init");
             _handledWindow = new HandleRef(null, WinApi.GetActiveWindow());
             _newWindowProcesses = WindowProcedure;
             _newWindowProcessesPtr = Marshal.GetFunctionPointerForDelegate(_newWindowProcesses);
@@ -69,64 +71,50 @@ namespace Borderless
 
         protected virtual void UpdateStyle()
         {
-            WinApi.SetWindowLongPtr(_handledWindow, (int) WindowLongIndex.Style, (IntPtr) WindowStyleFlags.Visible);
+//            WinApi.SetWindowLongPtr(_handledWindow, (int) WindowLongIndex.Style, (IntPtr) WindowStyleFlags.Visible);
+            WinApi.SetWindowLongPtr(_handledWindow, (int) WindowLongIndex.Style,
+                (IntPtr) (WindowStyleFlags.Visible));
+            WinApi.SetWindowLongPtr(_handledWindow, (int) WindowLongIndex.ExtendedStyle,
+                (IntPtr) (WindowStyleFlags.ExtendedNoParentNotify | WindowStyleFlags.ExtendedTransparent));
+
+            const uint message = (int) SetWindowPosFlags.FrameChanged |
+                                 (int) SetWindowPosFlags.NoMove |
+                                 (int) SetWindowPosFlags.NoSize |
+                                 (int) SetWindowPosFlags.NoRePosition |
+                                 (int) SetWindowPosFlags.NoZOrder |
+                                 (int) SetWindowPosFlags.NoOwnerZOrder;
+
+            WinApi.SetWindowPos(_handledWindow.Handle, 0, 0, 0, 0, 0, message);
         }
 
 
         [PermissionSet(SecurityAction.Demand, Name = "FullTrust")]
         protected virtual IntPtr WindowProcedure(IntPtr handleWindow, uint message, IntPtr outValue, IntPtr inValue)
         {
+//            Debug.Log(((WindowMessages) message).ToString());
+
+
             if (message == (uint) WindowMessages.NCDESTROY || message == (uint) WindowMessages.WINDOWPOSCHANGING)
             {
                 TerminateWindowProcedure();
             }
 
+
             if (message == (uint) WindowMessages.GETMINMAXINFO)
             {
-                return MinMaxSize(inValue);
+                if (ClickThrough)
+                {
+                    return MinMaxSize(inValue);
+                }
             }
 
             if (message == (uint) WindowMessages.NCHITTEST)
             {
-                return Resize(inValue);
+                if (ClickThrough)
+                {
+                    return Resize(inValue);
+                }
             }
-
-//        switch (message)
-//        {
-//            case (uint) WindowMessages.PAINT:
-//
-//                var hdc = BeginPaint(handleWindow, out var ps);
-//
-//                var gfx = XGraphic.FromHwnd(hdc);
-//                var brush = new SolidBrush(Color.White);
-//
-//                gfx.FillRectangle(brush,
-//                    ps.rcPaint.Left,
-//                    ps.rcPaint.Top,
-//                    ps.rcPaint.Right - ps.rcPaint.Left,
-//                    ps.rcPaint.Bottom - ps.rcPaint.Top);
-//
-//                EndPaint(handleWindow, ref ps);
-//                return (IntPtr) 1;
-//
-//            case (uint) WindowMessages.NCHITTEST:
-//                var aa = (uint) WindowStyleFlags.Caption |
-//                         (uint) WindowStyleFlags.Visible;
-//
-//                WinApi.SetWindowLongPtr(_handledWindow, (int) WindowLongIndex.WindowProc, (IntPtr) aa);
-//                return (IntPtr) 1;
-//
-//            case (uint) WindowMessages.COMMAND:
-//
-//                var id = wParam.ToInt32();
-//                if (id == (int) DialogBoxCommandID.IDOk || id == (int) DialogBoxCommandID.IDCancel)
-//                {
-//                    EndDialog(handleWindow, (IntPtr) id);
-//                    return (IntPtr) 1;
-//                }
-//
-//                return (IntPtr) 0;
-//        }
 
             return WinApi.DefWindowProc(handleWindow, message, outValue, inValue);
         }
@@ -211,5 +199,44 @@ namespace Borderless
 
             return (IntPtr) 17; /*Hit Bottom Right*/
         }
+
+        protected virtual void ShowWindow(WindowShowStyle windowStatus)
+        {
+            var activeWindow = WinApi.GetActiveWindow();
+
+            var status = (int) windowStatus;
+
+            WinApi.ShowWindow(activeWindow, status);
+        }
     }
 }
+
+
+//private bool m_aeroEnabled;
+
+//private bool CheckAeroEnabled()
+//{
+//if (Environment.OSVersion.Version.Major < 6) return false;
+//
+//var aeroEnabled = 0;
+//WinApi.DwmIsCompositionEnabled(ref aeroEnabled);
+//return aeroEnabled == 1;
+//}
+
+//if (message == (uint) WindowMessages.NCPAINT)
+//            {
+//                debug.text += "\n" + "paint / " + m_aeroEnabled;
+////                if (m_aeroEnabled)
+//                {
+//                    var v = 2;
+//                    WinApi.DwmSetWindowAttribute(_handledWindow.Handle, 2, ref v, 4);
+//                    var margins = new MARGINS()
+//                    {
+//                        bottomHeight = 5,
+//                        leftWidth = 5,
+//                        rightWidth = 5,
+//                        topHeight = 5
+//                    };
+//                    WinApi.DwmExtendFrameIntoClientArea(_handledWindow.Handle, ref margins);
+//                }
+//            }
