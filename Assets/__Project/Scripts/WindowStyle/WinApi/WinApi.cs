@@ -124,31 +124,38 @@ namespace Borderless
             int nBottomRect, // y-coordinate of lower-right corner
             int nWidthEllipse, // height of ellipse
             int nHeightEllipse // width of ellipse
-        );      
+        );
 
         #endregion
-        
+
         #region DwmExtendFrameIntoClientArea
 
         [DllImport("dwmapi.dll")]
         public static extern int DwmExtendFrameIntoClientArea(IntPtr hWnd, ref MARGINS pMarInset);
 
         #endregion
-        
+
         #region DwmSetWindowAttribute
 
         [DllImport("dwmapi.dll")]
         public static extern int DwmSetWindowAttribute(IntPtr hwnd, int attr, ref int attrValue, int attrSize);
 
         #endregion
-        
+
         #region DwmIsCompositionEnabled
 
         [DllImport("dwmapi.dll")]
         public static extern int DwmIsCompositionEnabled(ref int pfEnabled);
 
         #endregion
-        
+
+        #region SendMessage
+
+        [DllImport("user32.dll", CharSet = CharSet.Auto)]
+        public static extern IntPtr SendMessage(IntPtr handledWindow, int message, int wParam, IntPtr lParam);
+
+        #endregion
+
         #endregion
 
         #region Cursor
@@ -183,5 +190,4 @@ namespace Borderless
 
         #endregion
     }
-
 }

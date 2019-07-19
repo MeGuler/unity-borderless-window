@@ -9,6 +9,7 @@
       <e p="Assets" t="Include">
         <e p="__Project" t="Include">
           <e p="Scripts" t="Include">
+            <e p="SendMessageTest.cs" t="Include" />
             <e p="TEST.cs" t="Include" />
             <e p="WindowStyle" t="Include">
               <e p="Extensions" t="Include">

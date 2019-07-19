@@ -1,7 +1,6 @@
 ﻿using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
+
 
 namespace Borderless
 {
@@ -11,12 +10,7 @@ namespace Borderless
         public Vector2Int maxWindowSize;
         public Vector4Int resizeHandleSize;
         public int captionHeight;
-
-        [SerializeField] private Camera mainCamera;
-
-
-
-
+        
         protected override void Start()
         {
             MinWindowSize = minWindowSize;
@@ -25,49 +19,43 @@ namespace Borderless
             CaptionHeight = captionHeight;
             base.Start();
         }
+        
 
         protected override void OnGUI()
         {
-            
-            
-            
-            var rayOrigin = mainCamera.ScreenPointToRay(Input.mousePosition).origin;
-            var rayDirection = mainCamera.ScreenPointToRay(Input.mousePosition).direction;
-            ClickThrough = !Physics.Raycast(rayOrigin, rayDirection, out _, 100, Physics.DefaultRaycastLayers);
-
-            if (ClickThrough != PreviousClickThrough)
-            {
-
-//                if (ClickThrough)
+//            _pointerEventData = new PointerEventData(EventSystem.current);
+//            _pointerEventData.position = Input.mousePosition;
+//
+//            _raycastResult.Clear();
+//
+//            raycaster.Raycast(_pointerEventData, _raycastResult);
+//
+//            ClickThrough = _raycastResult.Count > 0;
+//
+//            if (ClickThrough != PreviousClickThrough)
+//            {
+//                if (!ClickThrough)
 //                {
-////                    WinApi.SetWindowLongPtr(_handledWindow, -20, (IntPtr) ((uint) 524288 | (uint) 32));
-//                    //other code
-////                    WindowStyleFlags.
+//                    InitializeWindowProcedure();
 //                }
 //                else
 //                {
-////                    WinApi.SetWindowLongPtr(_handledWindow, -20,
-////                        (IntPtr) (WindowStyleFlags.Popup | WindowStyleFlags.Visible));
-//                    //other code
+//                    TerminateWindowProcedure();
 //                }
-
-                PreviousClickThrough = ClickThrough;
-            }
-
-            if (!ClickThrough)
-            {
+//
+//                PreviousClickThrough = ClickThrough;
+//            }
+//            
+//            Debug.Log(ClickThrough);
+//            
+//            if (!ClickThrough)
+//            {
                 if (_handledWindow.Handle == IntPtr.Zero)
                 {
                     InitializeWindowProcedure();
                 }
-            }
-            else
-            {
-                TerminateWindowProcedure();
-            }
-            
-           
-            
+//            }
+
 
         }
 

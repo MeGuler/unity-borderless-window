@@ -1028,7 +1028,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1803417599}
+      - m_Target: {fileID: 0}
         m_MethodName: ExitApplication
         m_Mode: 1
         m_Arguments:
@@ -2684,7 +2684,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1803417599}
+      - m_Target: {fileID: 0}
         m_MethodName: Maximize
         m_Mode: 1
         m_Arguments:
@@ -3324,19 +3324,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 1803417594}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a65e1bd04edc1f545a8dac195b2110a6, type: 3}
+  m_Script: {fileID: 11500000, guid: 946960f7e2dad1e45a31b099de78ef5a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  debug: {fileID: 617779636}
-  minWindowSize: {x: 0, y: 0}
-  maxWindowSize: {x: 0, y: 0}
-  resizeHandleSize:
-    x: 5
-    y: 5
-    z: 5
-    w: 5
-  captionHeight: 35
-  raycaster: {fileID: 1803417595}
 --- !u!1 &1909923412
 GameObject:
   m_ObjectHideFlags: 0

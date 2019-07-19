@@ -9,11 +9,14 @@ EditorBuildSettings:
     path: Assets/__Project/Scenes/Borderless v2.unity
     guid: 2c50c5bd59090a948b7b1d2c9e66b102
   - enabled: 1
-    path: Assets/__Project/Scenes/Borderless v3.unity
-    guid: 8fc69e25c39e59d4ebcf725e447edff2
-  - enabled: 1
     path: Assets/__Project/Scenes/Borderless.unity
     guid: 7a56efe93a44b2543871d8076108f79f
+  - enabled: 1
+    path: Assets/__Project/Scenes/SendMessage.unity
+    guid: 436c1a23f416f724c99b3873b13f0b63
+  - enabled: 1
+    path: Assets/__Project/Scenes/Borderless v3.unity
+    guid: 8fc69e25c39e59d4ebcf725e447edff2
   - enabled: 1
     path: Assets/__Project/Scenes/test.unity
     guid: 4b35d1bc136205847a8889454138790d

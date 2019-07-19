@@ -1,10 +1,12 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Drawing;
 using System.Runtime.InteropServices;
 using System.Security.Permissions;
 using TMPro;
 using UnityEngine;
-using XGraphic = System.Drawing.Graphics;
+using UnityEngine.EventSystems;
+using UnityEngine.UI;
 
 namespace Borderless
 {
@@ -33,10 +35,41 @@ namespace Borderless
 
         #endregion
 
+
+        public TMP_InputField debug;
+        public GraphicRaycaster raycaster;
+        protected PointerEventData PointerEventData;
+        protected readonly List<RaycastResult> RaycastResult = new List<RaycastResult>();
+
         protected virtual void Start()
         {
             InitializeWindowProcedure();
             UpdateStyle();
+            var window = WinApi.GetActiveWindow();
+
+            var rect = GetWindowRect();
+
+//            WinApi.MoveWindow(window, (int) rect.x, (int) rect.y, (int) rect.width, (int) rect.height, true);
+
+            const uint message = (uint) (SetWindowPosFlags.FrameChanged);
+
+            WinApi.SetWindowPos(window, 0, (int) rect.x, (int) rect.y, (int) rect.width, (int) rect.height, message);
+        }
+
+        public static Rect GetWindowRect()
+        {
+            var activeWindow = WinApi.GetActiveWindow();
+            WinApi.GetWindowRect(activeWindow, out var windowRect);
+
+            var rect = new Rect
+            {
+                x = windowRect.Left,
+                y = windowRect.Top,
+                width = windowRect.Right - windowRect.Left,
+                height = windowRect.Bottom - windowRect.Top
+            };
+
+            return rect;
         }
 
         protected virtual void OnGUI()
@@ -49,6 +82,8 @@ namespace Borderless
 
         protected virtual void InitializeWindowProcedure()
         {
+            if (_newWindowProcesses != null) return;
+
             _handledWindow = new HandleRef(null, WinApi.GetActiveWindow());
             _newWindowProcesses = WindowProcedure;
             _newWindowProcessesPtr = Marshal.GetFunctionPointerForDelegate(_newWindowProcesses);
@@ -57,6 +92,8 @@ namespace Borderless
 
         protected virtual void TerminateWindowProcedure()
         {
+            if (_newWindowProcesses == null) return;
+
             WinApi.SetWindowLongPtr(_handledWindow, -4, _oldWindowProcessesPtr);
             _handledWindow = new HandleRef(null, IntPtr.Zero);
             _oldWindowProcessesPtr = IntPtr.Zero;
@@ -71,49 +108,99 @@ namespace Borderless
 
         protected virtual void UpdateStyle()
         {
-//            WinApi.SetWindowLongPtr(_handledWindow, (int) WindowLongIndex.Style, (IntPtr) WindowStyleFlags.Visible);
-            WinApi.SetWindowLongPtr(_handledWindow, (int) WindowLongIndex.Style,
-                (IntPtr) (WindowStyleFlags.Visible));
-            WinApi.SetWindowLongPtr(_handledWindow, (int) WindowLongIndex.ExtendedStyle,
-                (IntPtr) (WindowStyleFlags.ExtendedNoParentNotify | WindowStyleFlags.ExtendedTransparent));
-
-            const uint message = (int) SetWindowPosFlags.FrameChanged |
-                                 (int) SetWindowPosFlags.NoMove |
-                                 (int) SetWindowPosFlags.NoSize |
-                                 (int) SetWindowPosFlags.NoRePosition |
-                                 (int) SetWindowPosFlags.NoZOrder |
-                                 (int) SetWindowPosFlags.NoOwnerZOrder;
-
-            WinApi.SetWindowPos(_handledWindow.Handle, 0, 0, 0, 0, 0, message);
+            WinApi.SetWindowLongPtr(_handledWindow, (int) WindowLongIndex.Style, (IntPtr) WindowStyleFlags.Visible);
         }
 
 
         [PermissionSet(SecurityAction.Demand, Name = "FullTrust")]
         protected virtual IntPtr WindowProcedure(IntPtr handleWindow, uint message, IntPtr outValue, IntPtr inValue)
         {
-//            Debug.Log(((WindowMessages) message).ToString());
-
-
             if (message == (uint) WindowMessages.NCDESTROY || message == (uint) WindowMessages.WINDOWPOSCHANGING)
             {
                 TerminateWindowProcedure();
             }
 
-
             if (message == (uint) WindowMessages.GETMINMAXINFO)
             {
-                if (ClickThrough)
-                {
-                    return MinMaxSize(inValue);
-                }
+                return MinMaxSize(inValue);
             }
 
             if (message == (uint) WindowMessages.NCHITTEST)
             {
-                if (ClickThrough)
+//                RefreshWindow();
+                return Resize(handleWindow, message, outValue, inValue);
+            }
+
+
+            if (message == (uint) WindowMessages.NCLBUTTONDOWN)
+            {
+                debug.text = "window: " + handleWindow + "\n" +
+                             "message: " + (WindowMessages) message + "\n" +
+                             "wParam: " + outValue + "\n" +
+                             "lParam: " + inValue;
+
+                PointerEventData = new PointerEventData(EventSystem.current);
+                PointerEventData.position = Input.mousePosition;
+                PointerEventData.button = PointerEventData.InputButton.Left;
+//                var pointerCurrentRaycast = PointerEventData.pointerCurrentRaycast;
+
+
+                RaycastResult.Clear();
+
+                raycaster.Raycast(PointerEventData, RaycastResult);
+
+                foreach (var raycastResult in RaycastResult)
                 {
-                    return Resize(inValue);
+                    debug.text += "\n" + "name: " + raycastResult.gameObject.name;
                 }
+            }
+
+            if (message == (uint) WindowMessages.SIZING)
+            {
+                debug.text = "window: " + handleWindow + "\n" +
+                             "message: " + (WindowMessages) message + "\n" +
+                             "wParam: " + outValue + "\n" +
+                             "lParam: " + inValue;
+            }
+
+            if (message == (uint) WindowMessages.SIZE)
+            {
+                debug.text = "window: " + handleWindow + "\n" +
+                             "message: " + (WindowMessages) message + "\n" +
+                             "wParam: " + outValue + "\n" +
+                             "lParam: " + inValue;
+            }
+
+            if (message == (uint) WindowMessages.SIZECLIPBOARD)
+            {
+                debug.text = "window: " + handleWindow + "\n" +
+                             "message: " + (WindowMessages) message + "\n" +
+                             "wParam: " + outValue + "\n" +
+                             "lParam: " + inValue;
+            }
+
+            if (message == (uint) WindowMessages.NCCALCSIZE)
+            {
+                debug.text = "window: " + handleWindow + "\n" +
+                             "message: " + (WindowMessages) message + "\n" +
+                             "wParam: " + outValue + "\n" +
+                             "lParam: " + inValue;
+            }
+
+            if (message == (uint) WindowMessages.EXITSIZEMOVE)
+            {
+                debug.text = "window: " + handleWindow + "\n" +
+                             "message: " + (WindowMessages) message + "\n" +
+                             "wParam: " + outValue + "\n" +
+                             "lParam: " + inValue;
+            }
+
+            if (message == (uint) WindowMessages.ENTERSIZEMOVE)
+            {
+                debug.text = "window: " + handleWindow + "\n" +
+                             "message: " + (WindowMessages) message + "\n" +
+                             "wParam: " + outValue + "\n" +
+                             "lParam: " + inValue;
             }
 
             return WinApi.DefWindowProc(handleWindow, message, outValue, inValue);
@@ -145,7 +232,7 @@ namespace Borderless
             return (IntPtr) 0;
         }
 
-        protected virtual IntPtr Resize(IntPtr inValue)
+        protected virtual IntPtr Resize(IntPtr handleWindow, uint message, IntPtr outValue, IntPtr inValue)
         {
             var windowRect = WindowManager.GetWindowRect();
 
@@ -171,6 +258,10 @@ namespace Borderless
             {
                 if (cursorPositionRelative.X <= ResizeHandleSize.x)
                 {
+                    debug.text = "window: " + handleWindow + "\n" +
+                                 "message: " + (WindowMessages) message + "\n" +
+                                 "wParam: " + outValue + "\n" +
+                                 "lParam: " + inValue;
                     return (IntPtr) 10; /*Hit Left*/
                 }
 
@@ -181,7 +272,7 @@ namespace Borderless
                         return (IntPtr) 2; /*Hit Caption*/
                     }
 
-                    return (IntPtr) 0;
+                    return (IntPtr) 19;
                 }
 
                 return (IntPtr) 11; /*Hit Right*/
@@ -208,35 +299,19 @@ namespace Borderless
 
             WinApi.ShowWindow(activeWindow, status);
         }
+
+        protected virtual void RefreshWindow()
+        {
+            const uint message = (uint)
+            (
+                SetWindowPosFlags.FrameChanged |
+                SetWindowPosFlags.NoMove |
+                SetWindowPosFlags.NoSize |
+                SetWindowPosFlags.NoZOrder |
+                SetWindowPosFlags.NoOwnerZOrder
+            );
+
+            WinApi.SetWindowPos(_handledWindow.Handle, 0, 0, 0, 0, 0, message);
+        }
     }
 }
-
-
-//private bool m_aeroEnabled;
-
-//private bool CheckAeroEnabled()
-//{
-//if (Environment.OSVersion.Version.Major < 6) return false;
-//
-//var aeroEnabled = 0;
-//WinApi.DwmIsCompositionEnabled(ref aeroEnabled);
-//return aeroEnabled == 1;
-//}
-
-//if (message == (uint) WindowMessages.NCPAINT)
-//            {
-//                debug.text += "\n" + "paint / " + m_aeroEnabled;
-////                if (m_aeroEnabled)
-//                {
-//                    var v = 2;
-//                    WinApi.DwmSetWindowAttribute(_handledWindow.Handle, 2, ref v, 4);
-//                    var margins = new MARGINS()
-//                    {
-//                        bottomHeight = 5,
-//                        leftWidth = 5,
-//                        rightWidth = 5,
-//                        topHeight = 5
-//                    };
-//                    WinApi.DwmExtendFrameIntoClientArea(_handledWindow.Handle, ref margins);
-//                }
-//            }
