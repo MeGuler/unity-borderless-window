@@ -1,4 +1,4 @@
-﻿using System;
+﻿using System;    
 using System.Runtime.InteropServices;
 
 namespace Borderless
@@ -84,6 +84,15 @@ namespace Borderless
         }
 
         #endregion
+
+        #region CallWindowProc
+
+        [DllImport("user32.dll", CharSet=CharSet.Auto)]
+        public static extern IntPtr CallWindowProc(IntPtr previousWindowProcesses, IntPtr handledWindow, uint message, IntPtr wParam,
+            IntPtr lParam);
+
+        #endregion
+
 
         #region DefWindowProc
 

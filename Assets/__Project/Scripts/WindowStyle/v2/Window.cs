@@ -14,10 +14,10 @@ namespace Borderless
     {
         #region Window Procedure
 
-        protected HandleRef _handledWindow;
-        protected IntPtr _oldWindowProcessesPtr;
-        protected IntPtr _newWindowProcessesPtr;
-        protected WndProcDelegate _newWindowProcesses;
+        protected HandleRef HandledWindow;
+        protected IntPtr OldWindowProcedurePtr;
+        protected IntPtr NewWindowProcedurePtr;
+        protected WndProcDelegate NewWindowProcedure;
 
         protected bool ClickThrough = true;
         protected bool PreviousClickThrough = true;
@@ -37,9 +37,6 @@ namespace Borderless
 
 
         public TMP_InputField debug;
-        public GraphicRaycaster raycaster;
-        protected PointerEventData PointerEventData;
-        protected readonly List<RaycastResult> RaycastResult = new List<RaycastResult>();
 
         protected virtual void Start()
         {
@@ -74,7 +71,7 @@ namespace Borderless
 
         protected virtual void OnGUI()
         {
-            if (_handledWindow.Handle == IntPtr.Zero)
+            if (HandledWindow.Handle == IntPtr.Zero)
             {
                 InitializeWindowProcedure();
             }
@@ -82,23 +79,23 @@ namespace Borderless
 
         protected virtual void InitializeWindowProcedure()
         {
-            if (_newWindowProcesses != null) return;
+            if (NewWindowProcedure != null) return;
 
-            _handledWindow = new HandleRef(null, WinApi.GetActiveWindow());
-            _newWindowProcesses = WindowProcedure;
-            _newWindowProcessesPtr = Marshal.GetFunctionPointerForDelegate(_newWindowProcesses);
-            _oldWindowProcessesPtr = WinApi.SetWindowLongPtr(_handledWindow, -4, _newWindowProcessesPtr);
+            HandledWindow = new HandleRef(null, WinApi.GetActiveWindow());
+            NewWindowProcedure = WindowProcedure;
+            NewWindowProcedurePtr = Marshal.GetFunctionPointerForDelegate(NewWindowProcedure);
+            OldWindowProcedurePtr = WinApi.SetWindowLongPtr(HandledWindow, -4, NewWindowProcedurePtr);
         }
 
         protected virtual void TerminateWindowProcedure()
         {
-            if (_newWindowProcesses == null) return;
+            if (NewWindowProcedure == null) return;
 
-            WinApi.SetWindowLongPtr(_handledWindow, -4, _oldWindowProcessesPtr);
-            _handledWindow = new HandleRef(null, IntPtr.Zero);
-            _oldWindowProcessesPtr = IntPtr.Zero;
-            _newWindowProcessesPtr = IntPtr.Zero;
-            _newWindowProcesses = null;
+            WinApi.SetWindowLongPtr(HandledWindow, -4, OldWindowProcedurePtr);
+            HandledWindow = new HandleRef(null, IntPtr.Zero);
+            OldWindowProcedurePtr = IntPtr.Zero;
+            NewWindowProcedurePtr = IntPtr.Zero;
+            NewWindowProcedure = null;
         }
 
         ~Window()
@@ -108,13 +105,20 @@ namespace Borderless
 
         protected virtual void UpdateStyle()
         {
-            WinApi.SetWindowLongPtr(_handledWindow, (int) WindowLongIndex.Style, (IntPtr) WindowStyleFlags.Visible);
+            WinApi.SetWindowLongPtr(HandledWindow, (int) WindowLongIndex.Style, (IntPtr) WindowStyleFlags.Visible);
         }
 
 
         [PermissionSet(SecurityAction.Demand, Name = "FullTrust")]
         protected virtual IntPtr WindowProcedure(IntPtr handleWindow, uint message, IntPtr outValue, IntPtr inValue)
         {
+            var resize = IntPtr.Zero;
+
+            if (message)
+            {
+                
+            }
+            
             if (message == (uint) WindowMessages.NCDESTROY || message == (uint) WindowMessages.WINDOWPOSCHANGING)
             {
                 TerminateWindowProcedure();
@@ -127,83 +131,18 @@ namespace Borderless
 
             if (message == (uint) WindowMessages.NCHITTEST)
             {
-//                RefreshWindow();
-                return Resize(handleWindow, message, outValue, inValue);
+                resize = Resize(handleWindow, message, outValue, inValue);
+
+                debug.text = resize.ToString();
+//                return resize;
             }
 
 
-            if (message == (uint) WindowMessages.NCLBUTTONDOWN)
-            {
-                debug.text = "window: " + handleWindow + "\n" +
-                             "message: " + (WindowMessages) message + "\n" +
-                             "wParam: " + outValue + "\n" +
-                             "lParam: " + inValue;
-
-                PointerEventData = new PointerEventData(EventSystem.current);
-                PointerEventData.position = Input.mousePosition;
-                PointerEventData.button = PointerEventData.InputButton.Left;
-//                var pointerCurrentRaycast = PointerEventData.pointerCurrentRaycast;
 
 
-                RaycastResult.Clear();
 
-                raycaster.Raycast(PointerEventData, RaycastResult);
 
-                foreach (var raycastResult in RaycastResult)
-                {
-                    debug.text += "\n" + "name: " + raycastResult.gameObject.name;
-                }
-            }
-
-            if (message == (uint) WindowMessages.SIZING)
-            {
-                debug.text = "window: " + handleWindow + "\n" +
-                             "message: " + (WindowMessages) message + "\n" +
-                             "wParam: " + outValue + "\n" +
-                             "lParam: " + inValue;
-            }
-
-            if (message == (uint) WindowMessages.SIZE)
-            {
-                debug.text = "window: " + handleWindow + "\n" +
-                             "message: " + (WindowMessages) message + "\n" +
-                             "wParam: " + outValue + "\n" +
-                             "lParam: " + inValue;
-            }
-
-            if (message == (uint) WindowMessages.SIZECLIPBOARD)
-            {
-                debug.text = "window: " + handleWindow + "\n" +
-                             "message: " + (WindowMessages) message + "\n" +
-                             "wParam: " + outValue + "\n" +
-                             "lParam: " + inValue;
-            }
-
-            if (message == (uint) WindowMessages.NCCALCSIZE)
-            {
-                debug.text = "window: " + handleWindow + "\n" +
-                             "message: " + (WindowMessages) message + "\n" +
-                             "wParam: " + outValue + "\n" +
-                             "lParam: " + inValue;
-            }
-
-            if (message == (uint) WindowMessages.EXITSIZEMOVE)
-            {
-                debug.text = "window: " + handleWindow + "\n" +
-                             "message: " + (WindowMessages) message + "\n" +
-                             "wParam: " + outValue + "\n" +
-                             "lParam: " + inValue;
-            }
-
-            if (message == (uint) WindowMessages.ENTERSIZEMOVE)
-            {
-                debug.text = "window: " + handleWindow + "\n" +
-                             "message: " + (WindowMessages) message + "\n" +
-                             "wParam: " + outValue + "\n" +
-                             "lParam: " + inValue;
-            }
-
-            return WinApi.DefWindowProc(handleWindow, message, outValue, inValue);
+            return WinApi.CallWindowProc(OldWindowProcedurePtr, handleWindow, message, outValue, inValue);
         }
 
         protected virtual IntPtr MinMaxSize(IntPtr inValue)
@@ -311,7 +250,79 @@ namespace Borderless
                 SetWindowPosFlags.NoOwnerZOrder
             );
 
-            WinApi.SetWindowPos(_handledWindow.Handle, 0, 0, 0, 0, 0, message);
+            WinApi.SetWindowPos(HandledWindow.Handle, 0, 0, 0, 0, 0, message);
         }
     }
 }
+
+
+//            if (message == (uint) WindowMessages.NCLBUTTONDOWN)
+//            {
+//                debug.text = "window: " + handleWindow + "\n" +
+//                             "message: " + (WindowMessages) message + "\n" +
+//                             "wParam: " + outValue + "\n" +
+//                             "lParam: " + inValue;
+//
+//                PointerEventData = new PointerEventData(EventSystem.current);
+//                PointerEventData.position = Input.mousePosition;
+//                PointerEventData.button = PointerEventData.InputButton.Left;
+////                var pointerCurrentRaycast = PointerEventData.pointerCurrentRaycast;
+//
+//
+//                RaycastResult.Clear();
+//
+//                raycaster.Raycast(PointerEventData, RaycastResult);
+//
+//                foreach (var raycastResult in RaycastResult)
+//                {
+//                    debug.text += "\n" + "name: " + raycastResult.gameObject.name;
+//                }
+//            }
+//
+//            if (message == (uint) WindowMessages.SIZING)
+//            {
+//                debug.text = "window: " + handleWindow + "\n" +
+//                             "message: " + (WindowMessages) message + "\n" +
+//                             "wParam: " + outValue + "\n" +
+//                             "lParam: " + inValue;
+//            }
+
+//            if (message == (uint) WindowMessages.SIZE)
+//            {
+//                debug.text = "window: " + handleWindow + "\n" +
+//                             "message: " + (WindowMessages) message + "\n" +
+//                             "wParam: " + outValue + "\n" +
+//                             "lParam: " + inValue;
+//            }
+//
+//            if (message == (uint) WindowMessages.SIZECLIPBOARD)
+//            {
+//                debug.text = "window: " + handleWindow + "\n" +
+//                             "message: " + (WindowMessages) message + "\n" +
+//                             "wParam: " + outValue + "\n" +
+//                             "lParam: " + inValue;
+//            }
+//
+//            if (message == (uint) WindowMessages.NCCALCSIZE)
+//            {
+//                debug.text = "window: " + handleWindow + "\n" +
+//                             "message: " + (WindowMessages) message + "\n" +
+//                             "wParam: " + outValue + "\n" +
+//                             "lParam: " + inValue;
+//            }
+//
+//            if (message == (uint) WindowMessages.EXITSIZEMOVE)
+//            {
+//                debug.text = "window: " + handleWindow + "\n" +
+//                             "message: " + (WindowMessages) message + "\n" +
+//                             "wParam: " + outValue + "\n" +
+//                             "lParam: " + inValue;
+//            }
+
+//            if (message == (uint) WindowMessages.ENTERSIZEMOVE)
+//            {
+//                debug.text = "window: " + handleWindow + "\n" +
+//                             "message: " + (WindowMessages) message + "\n" +
+//                             "wParam: " + outValue + "\n" +
+//                             "lParam: " + inValue;
+//            }

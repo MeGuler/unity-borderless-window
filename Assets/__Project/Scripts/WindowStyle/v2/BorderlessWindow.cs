@@ -50,7 +50,7 @@ namespace Borderless
 //            
 //            if (!ClickThrough)
 //            {
-                if (_handledWindow.Handle == IntPtr.Zero)
+                if (HandledWindow.Handle == IntPtr.Zero)
                 {
                     InitializeWindowProcedure();
                 }
