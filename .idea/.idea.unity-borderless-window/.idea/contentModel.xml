@@ -4,55 +4,81 @@
     <e p="C:\Users\Maritimetainer\.Rider2019.1\system\extResources" t="IncludeRecursive" />
     <e p="C:\Users\Maritimetainer\.Rider2019.1\system\resharper-host\local\Transient\ReSharperHost\v191\SolutionCaches\_unity-borderless-window.2074181361.00" t="ExcludeRecursive" />
     <e p="D:\Z - Works\Personel\unity-borderless-window" t="IncludeRecursive">
-      <e p="Assembly-CSharp-firstpass.csproj" t="IncludeRecursive" />
+      <e p="Assembly-CSharp-Editor.csproj" t="IncludeRecursive" />
       <e p="Assembly-CSharp.csproj" t="IncludeRecursive" />
       <e p="Assets" t="Include">
         <e p="__Project" t="Include">
           <e p="Scripts" t="Include">
-            <e p="SendMessageTest.cs" t="Include" />
-            <e p="TEST.cs" t="Include" />
-            <e p="WindowStyle" t="Include">
-              <e p="Extensions" t="Include">
-                <e p="MathfExtension.cs" t="Include" />
-              </e>
+            <e p="Extensions" t="Include">
+              <e p="MathExtension.cs" t="Include" />
+            </e>
+            <e p="TransparentMaker.cs" t="Include" />
+            <e p="Window" t="Include">
+              <e p="BorderlessWindow.cs" t="Include" />
+              <e p="Window.cs" t="Include" />
+            </e>
+            <e p="Window - Manual Size" t="Include">
+              <e p="CursorData.cs" t="Include" />
               <e p="Managers" t="Include">
                 <e p="CursorManager.cs" t="Include" />
                 <e p="WindowManager.cs" t="Include" />
               </e>
-              <e p="TransparentWindow.cs" t="Include" />
-              <e p="v2" t="Include">
-                <e p="BorderlessWindow.cs" t="Include" />
-                <e p="Window.cs" t="Include" />
-              </e>
-              <e p="WinApi" t="Include">
-                <e p="Flags" t="Include">
-                  <e p="WinApiFlags.cs" t="Include" />
-                </e>
-                <e p="Structures" t="Include">
-                  <e p="WinApiStructures.cs" t="Include" />
-                </e>
-                <e p="WinApi.cs" t="Include" />
-              </e>
               <e p="WindowMover.cs" t="Include" />
               <e p="WindowStyle.cs" t="Include" />
             </e>
+            <e p="Windows Api" t="Include">
+              <e p="Apis" t="Include">
+                <e p="DwmApi.cs" t="Include" />
+                <e p="User32.cs" t="Include" />
+              </e>
+              <e p="Flags" t="Include">
+                <e p="CursorPositionFlags.cs" t="Include" />
+                <e p="HitTestValues.cs" t="Include" />
+                <e p="SetWindowPosFlags.cs" t="Include" />
+                <e p="WindowLongIndex.cs" t="Include" />
+                <e p="WindowMessages.cs" t="Include" />
+                <e p="WindowShowStyle.cs" t="Include" />
+                <e p="WindowStyleFlags.cs" t="Include" />
+              </e>
+              <e p="Structures" t="Include">
+                <e p="MARGINS.cs" t="Include" />
+                <e p="MINMAXINFO.cs" t="Include" />
+                <e p="POINT.cs" t="Include" />
+                <e p="RECT.cs" t="Include" />
+              </e>
+            </e>
+          </e>
+          <e p="Shaders" t="Include">
+            <e p="MakeTransparent.shader" t="Include" />
           </e>
         </e>
-        <e p="Plugins" t="Include">
-          <e p="IngameDebugConsole" t="Include">
-            <e p="README.txt" t="Include" />
+        <e p="_Third Party" t="Include">
+          <e p="ProceduralUIImage" t="Include">
+            <e p="Editor" t="Include">
+              <e p="FreeModifierEditor.cs" t="Include" />
+              <e p="ModifierUtility.cs" t="Include" />
+              <e p="ProceduralImageEditor.cs" t="Include" />
+              <e p="ProceduralImageEditorUtility.cs" t="Include" />
+            </e>
+            <e p="Resources" t="Include">
+              <e p="Shaders" t="Include">
+                <e p="ProceduralImageRuntime.shader" t="Include" />
+              </e>
+            </e>
             <e p="Scripts" t="Include">
-              <e p="CircularBuffer.cs" t="Include" />
-              <e p="ConsoleMethodAttribute.cs" t="Include" />
-              <e p="DebugLogConsole.cs" t="Include" />
-              <e p="DebugLogEntry.cs" t="Include" />
-              <e p="DebugLogIndexList.cs" t="Include" />
-              <e p="DebugLogItem.cs" t="Include" />
-              <e p="DebugLogLogcatListener.cs" t="Include" />
-              <e p="DebugLogManager.cs" t="Include" />
-              <e p="DebugLogPopup.cs" t="Include" />
-              <e p="DebugLogRecycledListView.cs" t="Include" />
-              <e p="DebugsOnScrollListener.cs" t="Include" />
+              <e p="Attributes" t="Include">
+                <e p="ModifierID.cs" t="Include" />
+              </e>
+              <e p="EmptySprite.cs" t="Include" />
+              <e p="Modifiers" t="Include">
+                <e p="CustomPremadeModifier.cs" t="Include" />
+                <e p="FreeModifier.cs" t="Include" />
+                <e p="OnlyOneEdgeModifier.cs" t="Include" />
+                <e p="RoundModifier.cs" t="Include" />
+                <e p="UniformModifier.cs" t="Include" />
+              </e>
+              <e p="ProceduralImage.cs" t="Include" />
+              <e p="ProceduralImageModifier.cs" t="Include" />
             </e>
           </e>
         </e>
