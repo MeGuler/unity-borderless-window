@@ -14,8 +14,11 @@
             </e>
             <e p="TransparentMaker.cs" t="Include" />
             <e p="Window" t="Include">
+              <e p="Base" t="Include">
+                <e p="Cursor.cs" t="Include" />
+                <e p="Window.cs" t="Include" />
+              </e>
               <e p="BorderlessWindow.cs" t="Include" />
-              <e p="Window.cs" t="Include" />
             </e>
             <e p="Window - Manual Size" t="Include">
               <e p="CursorData.cs" t="Include" />
@@ -32,12 +35,12 @@
                 <e p="User32.cs" t="Include" />
               </e>
               <e p="Flags" t="Include">
-                <e p="CursorPositionFlags.cs" t="Include" />
                 <e p="HitTestValues.cs" t="Include" />
                 <e p="SetWindowPosFlags.cs" t="Include" />
+                <e p="ShowWindowCommands.cs" t="Include" />
+                <e p="SizingWindowSide.cs" t="Include" />
                 <e p="WindowLongIndex.cs" t="Include" />
                 <e p="WindowMessages.cs" t="Include" />
-                <e p="WindowShowStyle.cs" t="Include" />
                 <e p="WindowStyleFlags.cs" t="Include" />
               </e>
               <e p="Structures" t="Include">
@@ -45,6 +48,7 @@
                 <e p="MINMAXINFO.cs" t="Include" />
                 <e p="POINT.cs" t="Include" />
                 <e p="RECT.cs" t="Include" />
+                <e p="WindowPlacement.cs" t="Include" />
               </e>
             </e>
           </e>

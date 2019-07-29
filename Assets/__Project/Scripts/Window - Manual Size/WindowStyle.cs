@@ -10,6 +10,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
+using Cursor = UnityEngine.Cursor;
 using Rect = UnityEngine.Rect;
 
 
@@ -49,7 +50,7 @@ public class WindowStyle : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
     private string _previousCursorName;
 
     private Vector2 _beginningCursorEdgeDistance;
-    private CursorPositionFlags _mouseDownCursorFlag;
+    private HitTestValues _mouseDownCursorFlag;
     private Rect _lastScreenRect;
 
     public GameObject blackPanel;
@@ -200,20 +201,20 @@ public class WindowStyle : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
 
         switch (cursorPositionFlags)
         {
-            case CursorPositionFlags.Bottom:
-            case CursorPositionFlags.Top:
+            case HitTestValues.BottomBorder:
+            case HitTestValues.TopBorder:
                 _currentCursorName = "Vertical";
                 break;
-            case CursorPositionFlags.Left:
-            case CursorPositionFlags.Right:
+            case HitTestValues.LeftBorder:
+            case HitTestValues.RightBorder:
                 _currentCursorName = "Horizontal";
                 break;
-            case CursorPositionFlags.TopLeft:
-            case CursorPositionFlags.BottomRight:
+            case HitTestValues.TopLeftBorder:
+            case HitTestValues.BottomRightBorder:
                 _currentCursorName = "Diagonal 1";
                 break;
-            case CursorPositionFlags.TopRight:
-            case CursorPositionFlags.BottomLeft:
+            case HitTestValues.TopRightBorder:
+            case HitTestValues.BottomLeftBorder:
                 _currentCursorName = "Diagonal 2";
                 break;
             default:
@@ -243,7 +244,7 @@ public class WindowStyle : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
             
             if (!WindowManager.Bordered && !WindowManager.Maximized)
             {
-                if (_mouseDownCursorFlag != CursorPositionFlags.Client)
+                if (_mouseDownCursorFlag != HitTestValues.Client)
                 {
                     blackPanel.SetActive(true);
                     WindowManager.LockWindowUpdate(true);
@@ -258,7 +259,7 @@ public class WindowStyle : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
         if (WindowManager.Resizable)
         {
             _beginningCursorEdgeDistance = CursorManager.GetEdgeDistance(out _mouseDownCursorFlag);
-            _mouseDownCursorFlag = CursorPositionFlags.Client;
+            _mouseDownCursorFlag = HitTestValues.Client;
             _isMouseDown = false;
 
             if (!WindowManager.Bordered && !WindowManager.Maximized)
@@ -312,7 +313,7 @@ public class WindowStyle : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
 //        }
 //        else
 //        {
-        WindowManager.ShowWindow(WindowManager.Maximized ? WindowShowStyle.Maximize : WindowShowStyle.Restore);
+        WindowManager.ShowWindow(WindowManager.Maximized ? ShowWindowCommands.Maximize : ShowWindowCommands.Restore);
 //        }
     }
 
@@ -358,7 +359,7 @@ public class WindowStyle : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
 
     public void Minimize()
     {
-        WindowManager.ShowWindow(WindowShowStyle.Minimize);
+        WindowManager.ShowWindow(ShowWindowCommands.Minimize);
     }
 
     public void Maximize()

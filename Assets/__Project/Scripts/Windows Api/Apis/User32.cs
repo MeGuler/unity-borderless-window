@@ -21,14 +21,14 @@ namespace Borderless.Api
 
         #endregion
 
-        
+
         #region GetCursorPosition
 
         [DllImport("user32.dll", EntryPoint = "GetCursorPos")]
         public static extern bool GetCursorPosition(out Point lpPoint);
 
         #endregion
-        
+
 
         #region Window Methods
 
@@ -145,8 +145,60 @@ namespace Borderless.Api
 
         #endregion
 
-        #endregion
-        
+        #region GetWindowPlacement
 
+        /// <summary>
+        /// Retrieves the show state and the restored, minimized, and maximized positions of the specified window.
+        /// </summary>
+        /// <param name="handledWindow">
+        /// A handle to the window.
+        /// </param>
+        /// <param name="windowPlacementPointer">
+        /// A pointer to the WindowPlacement structure that receives the show state and position information.
+        /// <para>
+        /// Before calling GetWindowPlacement, set the length member to sizeof(WindowPlacement). GetWindowPlacement fails if windowPlacementPointer-> length is not set correctly.
+        /// </para>
+        /// </param>
+        /// <returns>
+        /// If the function succeeds, the return value is nonzero.
+        /// <para>
+        /// If the function fails, the return value is zero. To get extended error information, call GetLastError.
+        /// </para>
+        /// </returns>
+        [DllImport("user32.dll")]
+        [return: MarshalAs(UnmanagedType.Bool)]
+        internal static extern bool
+            GetWindowPlacement(IntPtr handledWindow, ref WindowPlacement windowPlacementPointer);
+
+        #endregion
+
+        #region SetWindowPlacement 
+
+        /// <summary>
+        /// Sets the show state and the restored, minimized, and maximized positions of the specified window.
+        /// </summary>
+        /// <param name="handledWindow">
+        /// A handle to the window.
+        /// </param>
+        /// <param name="windowPlacementPointer">
+        /// A pointer to a WindowPlacement structure that specifies the new show state and window positions.
+        /// <para>
+        /// Before calling SetWindowPlacement, set the length member of the WindowPlacement structure to sizeof(WindowPlacement). SetWindowPlacement fails if the length member is not set correctly.
+        /// </para>
+        /// </param>
+        /// <returns>
+        /// If the function succeeds, the return value is nonzero.
+        /// <para>
+        /// If the function fails, the return value is zero. To get extended error information, call GetLastError.
+        /// </para>
+        /// </returns>
+        [DllImport("user32.dll")]
+        [return: MarshalAs(UnmanagedType.Bool)]
+        internal static extern bool
+            SetWindowPlacement(IntPtr handledWindow, ref WindowPlacement windowPlacementPointer);
+
+        #endregion
+
+        #endregion
     }
 }

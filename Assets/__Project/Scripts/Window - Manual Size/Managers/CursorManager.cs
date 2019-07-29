@@ -52,67 +52,67 @@ public static class CursorManager
         return relativePoint;
     }
 
-    public static CursorPositionFlags GetCursorPositionFlag()
+    public static HitTestValues GetCursorPositionFlag()
     {
         var mousePosition = GetCursorPosition();
 
         return GetSpecificCursorPositionFlags(mousePosition);
     }
 
-    public static CursorPositionFlags GetSpecificCursorPositionFlags(Vector2 cursorPoint)
+    public static HitTestValues GetSpecificCursorPositionFlags(Vector2 cursorPoint)
     {
         
         var rectPoints = WindowManager.GetWindowRectPoints();
         var mousePosition = cursorPoint;
         var borderSize = WindowManager.BorderSize;
         
-        CursorPositionFlags cursorPositionFlags;
+        HitTestValues cursorPositionFlags;
 
         if (MathExtension.IsBetween(mousePosition.x, rectPoints.Left, rectPoints.Left + borderSize.x, true))
         {
-            cursorPositionFlags = CursorPositionFlags.Left;
+            cursorPositionFlags = HitTestValues.LeftBorder;
 
             if (MathExtension.IsBetween(mousePosition.y, rectPoints.Top, rectPoints.Top + borderSize.y, true))
             {
-                cursorPositionFlags = CursorPositionFlags.TopLeft;
+                cursorPositionFlags = HitTestValues.TopLeftBorder;
             }
             else if (MathExtension.IsBetween(mousePosition.y, rectPoints.Bottom - borderSize.w, rectPoints.Bottom,
                 true))
             {
-                cursorPositionFlags = CursorPositionFlags.BottomLeft;
+                cursorPositionFlags = HitTestValues.BottomLeftBorder;
             }
         }
         else if (MathExtension.IsBetween(mousePosition.x, rectPoints.Right - borderSize.z, rectPoints.Right, true))
         {
-            cursorPositionFlags = CursorPositionFlags.Right;
+            cursorPositionFlags = HitTestValues.RightBorder;
 
             if (MathExtension.IsBetween(mousePosition.y, rectPoints.Top, rectPoints.Top + borderSize.y, true))
             {
-                cursorPositionFlags = CursorPositionFlags.TopRight;
+                cursorPositionFlags = HitTestValues.TopRightBorder;
             }
             else if (MathExtension.IsBetween(mousePosition.y, rectPoints.Bottom - borderSize.w, rectPoints.Bottom,
                 true))
             {
-                cursorPositionFlags = CursorPositionFlags.BottomRight;
+                cursorPositionFlags = HitTestValues.BottomRightBorder;
             }
         }
         else if (MathExtension.IsBetween(mousePosition.y, rectPoints.Top, rectPoints.Top + borderSize.y, true))
         {
-            cursorPositionFlags = CursorPositionFlags.Top;
+            cursorPositionFlags = HitTestValues.TopBorder;
         }
         else if (MathExtension.IsBetween(mousePosition.y, rectPoints.Bottom - borderSize.w, rectPoints.Bottom, true))
         {
-            cursorPositionFlags = CursorPositionFlags.Bottom;
+            cursorPositionFlags = HitTestValues.BottomBorder;
         }
         else
         {
-            cursorPositionFlags = CursorPositionFlags.Client;
+            cursorPositionFlags = HitTestValues.Client;
         }
 
         return cursorPositionFlags;
     }
     
-     public static Vector2 GetEdgeDistance(out CursorPositionFlags cursorPositionFlag)
+     public static Vector2 GetEdgeDistance(out HitTestValues cursorPositionFlag)
     {
         var globalCursorPosition = GetCursorPosition();
         var windowRectPoints = WindowManager.GetWindowRectPoints();
@@ -121,44 +121,44 @@ public static class CursorManager
 
         var distance = new Vector2();
         
-        if (cursorPositionFlag == CursorPositionFlags.Left)
+        if (cursorPositionFlag == HitTestValues.LeftBorder)
         {
             distance.x = Mathf.Abs(globalCursorPosition.x - windowRectPoints.Left);
         }
 
-        else if (cursorPositionFlag == CursorPositionFlags.Right)
+        else if (cursorPositionFlag == HitTestValues.RightBorder)
         {
             distance.x = Mathf.Abs(globalCursorPosition.x - windowRectPoints.Right);
         }
 
-        else if (cursorPositionFlag == CursorPositionFlags.Top)
+        else if (cursorPositionFlag == HitTestValues.TopBorder)
         {
             distance.y = Mathf.Abs(globalCursorPosition.y - windowRectPoints.Top);
         }
 
-        else if (cursorPositionFlag == CursorPositionFlags.Bottom)
+        else if (cursorPositionFlag == HitTestValues.BottomBorder)
         {
             distance.y = Mathf.Abs(globalCursorPosition.y - windowRectPoints.Bottom);
         }
 
-        else if (cursorPositionFlag == CursorPositionFlags.TopLeft)
+        else if (cursorPositionFlag == HitTestValues.TopLeftBorder)
         {
             distance.x = Mathf.Abs(globalCursorPosition.x - windowRectPoints.Left);
             distance.y = Mathf.Abs(globalCursorPosition.y - windowRectPoints.Top);
         }
 
-        else if (cursorPositionFlag == CursorPositionFlags.TopRight)
+        else if (cursorPositionFlag == HitTestValues.TopRightBorder)
         {
             distance.x = Mathf.Abs(globalCursorPosition.x - windowRectPoints.Right);
             distance.y = Mathf.Abs(globalCursorPosition.y - windowRectPoints.Top);
         }
 
-        else if (cursorPositionFlag == CursorPositionFlags.BottomLeft)
+        else if (cursorPositionFlag == HitTestValues.BottomLeftBorder)
         {
             distance.x = Mathf.Abs(globalCursorPosition.x - windowRectPoints.Left);
             distance.y = Mathf.Abs(globalCursorPosition.y - windowRectPoints.Bottom);
         }
-        else if (cursorPositionFlag == CursorPositionFlags.BottomRight)
+        else if (cursorPositionFlag == HitTestValues.BottomRightBorder)
         {
             distance.x = Mathf.Abs(globalCursorPosition.x - windowRectPoints.Right);
             distance.y = Mathf.Abs(globalCursorPosition.y - windowRectPoints.Bottom);

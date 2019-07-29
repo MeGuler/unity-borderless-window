@@ -188,11 +188,11 @@ public class WindowManager
 //        WinApi.SetWindowPos(HandledWindow.Handle, 0, 0, 0, 0, 0, message);
     }
 
-    public static void ShowWindow(WindowShowStyle windowStatus)
+    public static void ShowWindow(ShowWindowCommands showWindowStatus)
     {
         var activeWindow = User32.GetActiveWindow();
 
-        var status = (int) windowStatus;
+        var status = (int) showWindowStatus;
 
         User32.ShowWindow(activeWindow, status);
     }
@@ -402,9 +402,9 @@ public class WindowManager
 
     #region Size
 
-    public static void WindowSizeChange(Vector2 beginningCursorEdgeDistance, CursorPositionFlags beginningCursorFlag)
+    public static void WindowSizeChange(Vector2 beginningCursorEdgeDistance, HitTestValues beginningCursorFlag)
     {
-        if (beginningCursorFlag == CursorPositionFlags.Client)
+        if (beginningCursorFlag == HitTestValues.Client)
         {
             return;
         }
@@ -420,9 +420,9 @@ public class WindowManager
             float aspectSizeValue;
             switch (beginningCursorFlag)
             {
-                case CursorPositionFlags.Left:
-                case CursorPositionFlags.TopLeft:
-                case CursorPositionFlags.BottomLeft:
+                case HitTestValues.LeftBorder:
+                case HitTestValues.TopLeftBorder:
+                case HitTestValues.BottomLeftBorder:
                     newWindowRect = WindowRectResizeLeft
                     (
                         beginningCursorEdgeDistance,
@@ -434,9 +434,9 @@ public class WindowManager
                     aspectSizeValue = newWindowRect.width / AspectRatio.x;
                     newWindowRect.height = aspectSizeValue * AspectRatio.y;
                     break;
-                case CursorPositionFlags.Right:
-                case CursorPositionFlags.BottomRight:
-                case CursorPositionFlags.TopRight:
+                case HitTestValues.RightBorder:
+                case HitTestValues.BottomRightBorder:
+                case HitTestValues.TopRightBorder:
                     newWindowRect = WindowRectResizeRight
                     (
                         beginningCursorEdgeDistance,
@@ -448,7 +448,7 @@ public class WindowManager
                     aspectSizeValue = newWindowRect.width / AspectRatio.x;
                     newWindowRect.height = aspectSizeValue * AspectRatio.y;
                     break;
-                case CursorPositionFlags.Top:
+                case HitTestValues.TopBorder:
                     newWindowRect = WindowRectResizeTop
                     (
                         beginningCursorEdgeDistance,
@@ -460,7 +460,7 @@ public class WindowManager
                     aspectSizeValue = newWindowRect.height / AspectRatio.y;
                     newWindowRect.width = aspectSizeValue * AspectRatio.x;
                     break;
-                case CursorPositionFlags.Bottom:
+                case HitTestValues.BottomBorder:
                     newWindowRect = WindowRectResizeBottom
                     (
                         beginningCursorEdgeDistance,
@@ -478,7 +478,7 @@ public class WindowManager
         {
             switch (beginningCursorFlag)
             {
-                case CursorPositionFlags.Left:
+                case HitTestValues.LeftBorder:
                 {
                     newWindowRect = WindowRectResizeLeft
                     (
@@ -490,7 +490,7 @@ public class WindowManager
                     break;
                 }
 
-                case CursorPositionFlags.Right:
+                case HitTestValues.RightBorder:
                 {
                     newWindowRect = WindowRectResizeRight
                     (
@@ -502,7 +502,7 @@ public class WindowManager
                     break;
                 }
 
-                case CursorPositionFlags.Top:
+                case HitTestValues.TopBorder:
                 {
                     newWindowRect = WindowRectResizeTop
                     (
@@ -514,7 +514,7 @@ public class WindowManager
                     break;
                 }
 
-                case CursorPositionFlags.Bottom:
+                case HitTestValues.BottomBorder:
                 {
                     newWindowRect = WindowRectResizeBottom
                     (
@@ -526,7 +526,7 @@ public class WindowManager
                     break;
                 }
 
-                case CursorPositionFlags.TopLeft:
+                case HitTestValues.TopLeftBorder:
                     newWindowRect = WindowRectResizeLeft
                     (beginningCursorEdgeDistance,
                         windowRectPoints,
@@ -541,7 +541,7 @@ public class WindowManager
                         newWindowRect
                     );
                     break;
-                case CursorPositionFlags.TopRight:
+                case HitTestValues.TopRightBorder:
                     newWindowRect = WindowRectResizeRight
                     (
                         beginningCursorEdgeDistance,
@@ -557,7 +557,7 @@ public class WindowManager
                         newWindowRect
                     );
                     break;
-                case CursorPositionFlags.BottomLeft:
+                case HitTestValues.BottomLeftBorder:
                     newWindowRect = WindowRectResizeLeft
                     (
                         beginningCursorEdgeDistance,
@@ -574,7 +574,7 @@ public class WindowManager
                         newWindowRect
                     );
                     break;
-                case CursorPositionFlags.BottomRight:
+                case HitTestValues.BottomRightBorder:
                     newWindowRect = WindowRectResizeRight
                     (
                         beginningCursorEdgeDistance,

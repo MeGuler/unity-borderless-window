@@ -1,4 +1,6 @@
-﻿using Borderless.Api.Structures;
+﻿using System;
+using Borderless.Api;
+using Borderless.Api.Structures;
 using Borderless.Flags;
 using UnityEngine;
 
@@ -10,9 +12,9 @@ namespace Borderless
         #region WindowSettings
 
         public Vector4Int resizeBorderSize;
+        public Vector2Int defaultWindowSize;
         public Vector2Int minWindowSize;
         public Vector2Int maxWindowSize;
-        public Vector4Int resizeHandleSize;
         public int captionHeight;
 
         #endregion
@@ -20,13 +22,13 @@ namespace Borderless
         protected override void Awake()
         {
             ResizeBorderSize = resizeBorderSize;
+            StartWindowSize = defaultWindowSize;
             MinWindowSize = minWindowSize;
             MaxWindowSize = maxWindowSize;
-            ResizeHandleSize = resizeHandleSize;
             CaptionHeight = captionHeight;
             base.Awake();
         }
-        
+
         public void ExitApplication()
         {
             Application.Quit();
@@ -34,8 +36,19 @@ namespace Borderless
 
         public void Maximize()
         {
-            ShowWindow(WindowShowStyle.Maximize);
+            var placement = GetWindowPlacement();
+
+
+            if (placement.ShowCommand == ShowWindowCommands.Maximize)
+            {
+                placement.ShowCommand = ShowWindowCommands.Restore;
+            }
+            else
+            {
+                placement.ShowCommand = ShowWindowCommands.Maximize;
+            }
+
+            User32.SetWindowPlacement(HandledWindow.Handle, ref placement);
         }
-        
     }
 }
