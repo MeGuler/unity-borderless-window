@@ -36,6 +36,7 @@
               </e>
               <e p="Flags" t="Include">
                 <e p="HitTestValues.cs" t="Include" />
+                <e p="MonitorFlags.cs" t="Include" />
                 <e p="SetWindowPosFlags.cs" t="Include" />
                 <e p="ShowWindowCommands.cs" t="Include" />
                 <e p="SizingWindowSide.cs" t="Include" />
@@ -46,6 +47,7 @@
               <e p="Structures" t="Include">
                 <e p="MARGINS.cs" t="Include" />
                 <e p="MINMAXINFO.cs" t="Include" />
+                <e p="MonitorInfo.cs" t="Include" />
                 <e p="POINT.cs" t="Include" />
                 <e p="RECT.cs" t="Include" />
                 <e p="WindowPlacement.cs" t="Include" />
@@ -53,6 +55,7 @@
             </e>
           </e>
           <e p="Shaders" t="Include">
+            <e p="ChromakeyTransparent.shader" t="Include" />
             <e p="MakeTransparent.shader" t="Include" />
           </e>
         </e>

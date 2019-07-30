@@ -33,10 +33,14 @@ namespace Borderless
         public Vector2Int MinWindowSize { get; protected set; }
         public Vector2Int MaxWindowSize { get; protected set; }
         public int CaptionHeight { get; protected set; }
+        public bool KeepAspectRatio { get; protected set; }
 
         #endregion
 
         private bool _isMouseOver;
+
+
+        private Vector2 _aspectRatio;
 
         public TMP_InputField debug;
 
@@ -46,7 +50,15 @@ namespace Borderless
 
             InitializeWindowProcedure();
             SetWindowStyle();
-            RefreshWindow();
+            SetWindowDefaultSize();
+
+            var aspectRatioX = (float) StartWindowSize.x / (float) StartWindowSize.y;
+            var aspectRatioY = (float) StartWindowSize.y / (float) StartWindowSize.x;
+
+            _aspectRatio.x = aspectRatioX;
+            _aspectRatio.y = aspectRatioY;
+
+            debug.text += "\n" + _aspectRatio.x + " / " + _aspectRatio.y;
         }
 
         protected virtual void OnGUI()
@@ -158,18 +170,22 @@ namespace Borderless
 
             if (message == (uint) WindowMessages.GETMINMAXINFO)
             {
-                MinMaxSize(lParam);
+                GetMinMaxInfo(lParam);
             }
 
             if (message == (uint) WindowMessages.SIZING)
             {
+                if (KeepAspectRatio)
+                {
+                    Sizing(wParam, lParam);
+                }
             }
 
             if (message == (uint) WindowMessages.NCHITTEST)
             {
                 if (!_isMouseOver)
                 {
-                    var resize = Resize();
+                    var resize = NonClientHitTest();
 
                     if (resize != (int) HitTestValues.Client)
                     {
@@ -178,13 +194,14 @@ namespace Borderless
                 }
             }
 
+
             return User32.CallWindowProc(OldWindowProcedurePtr, handleWindow, message, wParam, lParam);
         }
 
 
         #region Procedures
 
-        protected virtual void MinMaxSize(IntPtr inValue)
+        protected virtual void GetMinMaxInfo(IntPtr inValue)
         {
             var minMaxInfo = (MinMaxInfo) Marshal.PtrToStructure(inValue, typeof(MinMaxInfo));
 
@@ -207,7 +224,42 @@ namespace Borderless
             Marshal.StructureToPtr(minMaxInfo, inValue, false);
         }
 
-        protected virtual int Resize()
+        protected virtual void Sizing(IntPtr wParam, IntPtr lParam)
+        {
+            var rect = (Rect) Marshal.PtrToStructure(lParam, typeof(Rect));
+            var sizingSide = wParam.ToInt32();
+
+            if (sizingSide == (int) SizingWindowSide.Left || sizingSide == (int) SizingWindowSide.Right)
+            {
+                //Left or right resize -> adjust height (bottom)
+                rect.Bottom = rect.Top + (int) (rect.Width / _aspectRatio.x);
+            }
+            else if (sizingSide == (int) SizingWindowSide.Top || sizingSide == (int) SizingWindowSide.Bottom)
+            {
+                //Up or down resize -> adjust width (right)
+                rect.Right = rect.Left + (int) (rect.Height / _aspectRatio.y);
+            }
+            else if (sizingSide == (int) SizingWindowSide.BottomRight ||
+                     sizingSide == (int) SizingWindowSide.BottomLeft)
+            {
+                //Lower-right corner resize -> adjust height (could have been width)
+                rect.Bottom = rect.Top + (int) (rect.Width / _aspectRatio.x);
+            }
+            else if (sizingSide == (int) SizingWindowSide.TopLeft)
+            {
+                //Upper-left corner -> adjust width (could have been height)
+                rect.Left = rect.Right - (int) (rect.Height / _aspectRatio.y);
+            }
+            else if (sizingSide == (int) SizingWindowSide.TopRight)
+            {
+                //Upper-right corner -> adjust width (could have been height)
+                rect.Right = rect.Left + (int) (rect.Height / _aspectRatio.y);
+            }
+
+            Marshal.StructureToPtr(rect, lParam, true);
+        }
+
+        protected virtual int NonClientHitTest()
         {
             var cursorPositionFlag = Cursor.GetCursorPositionFlag(this);
 
@@ -237,9 +289,21 @@ namespace Borderless
             DwmApi.DwmExtendFrameIntoClientArea(HandledWindow.Handle, ref margins);
         }
 
-        protected virtual void RefreshWindow()
+        protected virtual void SetWindowDefaultSize()
         {
-            var rect = GetWindowRect();
+            var info = GetMonitorInfo();
+
+            Vector2 centerWindow;
+            centerWindow.x = (info.MonitorRect.Width - StartWindowSize.x) / 2f;
+            centerWindow.y = (info.MonitorRect.Height - StartWindowSize.y) / 2f;
+
+            debug.text += "\n" + "Monitor Width: " + info.MonitorName.Length;
+            debug.text += "\n" + "Monitor Width: " + info.MonitorRect.Width;
+            debug.text += "\n" + "Monitor Height: " + info.MonitorRect.Height;
+            debug.text += "\n" + "StartWindowSize.x: " + StartWindowSize.x;
+            debug.text += "\n" + "StartWindowSize.y: " + StartWindowSize.y;
+            debug.text += "\n" + "centerWindow.x: " + centerWindow.x;
+            debug.text += "\n" + "centerWindow.y: " + centerWindow.y;
 
             const uint message = (uint)
             (
@@ -250,11 +314,22 @@ namespace Borderless
             (
                 HandledWindow.Handle,
                 0,
-                (int) rect.x,
-                (int) rect.y,
-                (int) rect.width,
-                (int) rect.height, message
+                (int) centerWindow.x,
+                (int) centerWindow.y,
+                StartWindowSize.x,
+                StartWindowSize.y,
+                message
             );
+        }
+
+        public MonitorInfo GetMonitorInfo()
+        {
+            var monitor = User32.MonitorFromWindow(HandledWindow.Handle, (int) MonitorFlag.DefaultToNearest);
+
+            var info = new MonitorInfo();
+            info.Size = Marshal.SizeOf(typeof(MonitorInfo));
+            User32.GetMonitorInfo(monitor, ref info);
+            return info;
         }
 
         public UnityEngine.Rect GetWindowRect()
@@ -289,3 +364,31 @@ namespace Borderless
         #endregion
     }
 }
+
+
+//if (sizingSide == (int) SizingWindowSide.Left || sizingSide == (int) SizingWindowSide.Right)
+//{
+////Left or right resize -> adjust height (bottom)
+//rect.Bottom = rect.Top + (int) (HeightRatio * rect.Width / WidthRatio);
+//}
+//else if (sizingSide == (int) SizingWindowSide.Top || sizingSide == (int) SizingWindowSide.Bottom)
+//{
+////Up or down resize -> adjust width (right)
+//rect.Right = rect.Left + (int) (WidthRatio * rect.Height / HeightRatio);
+//}
+//else if (sizingSide == (int) SizingWindowSide.BottomRight ||
+//sizingSide == (int) SizingWindowSide.BottomLeft)
+//{
+////Lower-right corner resize -> adjust height (could have been width)
+//rect.Bottom = rect.Top + (int) (HeightRatio * rect.Width / WidthRatio);
+//}
+//else if (sizingSide == (int) SizingWindowSide.TopLeft)
+//{
+////Upper-left corner -> adjust width (could have been height)
+//rect.Left = rect.Right - (int) (WidthRatio * rect.Height / HeightRatio);
+//}
+//else if (sizingSide == (int) SizingWindowSide.TopRight)
+//{
+////Upper-right corner -> adjust width (could have been height)
+//rect.Right = rect.Left + (int) (WidthRatio * rect.Height / HeightRatio);
+//}

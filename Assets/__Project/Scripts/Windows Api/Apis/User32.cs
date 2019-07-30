@@ -199,6 +199,20 @@ namespace Borderless.Api
 
         #endregion
 
+        #region MonitorFromWindow
+
+        [DllImport("user32.dll", ExactSpelling = true)]
+        public static extern IntPtr MonitorFromWindow(IntPtr handledWindow, uint flags);
+
+        #endregion
+
+        #region GetMonitorInfo
+
+        [DllImport("user32.dll", CharSet = CharSet.Auto)]
+        public static extern bool GetMonitorInfo(IntPtr handledMonitor, ref MonitorInfo monitorInfo);
+
+        #endregion
+
         #endregion
     }
 }

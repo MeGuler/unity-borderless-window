@@ -58,8 +58,28 @@ namespace Borderless
 
             return false;
         }
+
+        public static int GreatestCommonDivisor(int a, int b)
+        {
+            a = Math.Abs(a);
+            b = Math.Abs(b);
+
+            // Pull out remainders.
+            while (true)
+            {
+                var remainder = a % b;
+                if (remainder == 0) return b;
+                a = b;
+                b = remainder;
+            }
+        }
+
+        public static int LeastCommonMultiple(int a, int b)
+        {
+            return a * b / GreatestCommonDivisor(a, b);
+        }
     }
-    
+
     [Serializable]
     public class Vector4Int
     {

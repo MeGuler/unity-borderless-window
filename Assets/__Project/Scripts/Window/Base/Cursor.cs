@@ -34,20 +34,20 @@ namespace Borderless
                     mousePosition.x,
                     rectPoints.Left,
                     rectPoints.Left + resizeBorderSize.x,
-                    true
+                    false
                 )
             )
             {
                 cursorPositionFlags = HitTestValues.LeftBorder;
 
                 if (MathExtension.IsBetween(mousePosition.y, rectPoints.Top, rectPoints.Top + resizeBorderSize.y,
-                    true))
+                    false))
                 {
                     cursorPositionFlags = HitTestValues.TopLeftBorder;
                 }
                 else if (MathExtension.IsBetween(mousePosition.y, rectPoints.Bottom - resizeBorderSize.w,
                     rectPoints.Bottom,
-                    true))
+                    false))
                 {
                     cursorPositionFlags = HitTestValues.BottomLeftBorder;
                 }
@@ -58,20 +58,20 @@ namespace Borderless
                     mousePosition.x,
                     rectPoints.Right - resizeBorderSize.z,
                     rectPoints.Right,
-                    true
+                    false
                 )
             )
             {
                 cursorPositionFlags = HitTestValues.RightBorder;
 
                 if (MathExtension.IsBetween(mousePosition.y, rectPoints.Top, rectPoints.Top + resizeBorderSize.y,
-                    true))
+                    false))
                 {
                     cursorPositionFlags = HitTestValues.TopRightBorder;
                 }
                 else if (MathExtension.IsBetween(mousePosition.y, rectPoints.Bottom - resizeBorderSize.w,
                     rectPoints.Bottom,
-                    true))
+                    false))
                 {
                     cursorPositionFlags = HitTestValues.BottomRightBorder;
                 }
@@ -82,7 +82,7 @@ namespace Borderless
                     mousePosition.y,
                     rectPoints.Top,
                     rectPoints.Top + resizeBorderSize.y,
-                    true
+                    false
                 )
             )
             {
@@ -105,7 +105,7 @@ namespace Borderless
                     mousePosition.y,
                     rectPoints.Bottom - resizeBorderSize.w,
                     rectPoints.Bottom,
-                    true
+                    false
                 )
             )
             {

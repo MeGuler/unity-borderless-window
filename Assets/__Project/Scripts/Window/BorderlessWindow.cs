@@ -12,20 +12,25 @@ namespace Borderless
         #region WindowSettings
 
         public Vector4Int resizeBorderSize;
-        public Vector2Int defaultWindowSize;
+        public Vector2Int startWindowSize;
         public Vector2Int minWindowSize;
         public Vector2Int maxWindowSize;
         public int captionHeight;
+        public bool keepAspectRatio;
 
         #endregion
 
         protected override void Awake()
         {
+//            debug.text = MathExtension.GreatestCommonDivisor(1920, 1080).ToString();
+
+//            return;
             ResizeBorderSize = resizeBorderSize;
-            StartWindowSize = defaultWindowSize;
+            StartWindowSize = startWindowSize;
             MinWindowSize = minWindowSize;
             MaxWindowSize = maxWindowSize;
             CaptionHeight = captionHeight;
+            KeepAspectRatio = keepAspectRatio;
             base.Awake();
         }
 
