@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Data.SqlClient;
 using System.Runtime.InteropServices;
 using System.Security.Permissions;
 using UnityEngine;
@@ -9,7 +8,7 @@ using Borderless.Api;
 using Borderless.Api.Structures;
 using Borderless.Flags;
 using TMPro;
-using UnityEditor;
+
 
 namespace Borderless
 {
@@ -52,13 +51,13 @@ namespace Borderless
             SetWindowStyle();
             SetWindowDefaultSize();
 
-            var aspectRatioX = (float) StartWindowSize.x / (float) StartWindowSize.y;
-            var aspectRatioY = (float) StartWindowSize.y / (float) StartWindowSize.x;
+            var aspectRatioX = StartWindowSize.x / (float) StartWindowSize.y;
+            var aspectRatioY = StartWindowSize.y / (float) StartWindowSize.x;
 
             _aspectRatio.x = aspectRatioX;
             _aspectRatio.y = aspectRatioY;
 
-            debug.text += "\n" + _aspectRatio.x + " / " + _aspectRatio.y;
+//            debug.text += "\n" + _aspectRatio.x + " / " + _aspectRatio.y;
         }
 
         protected virtual void OnGUI()
@@ -181,6 +180,11 @@ namespace Borderless
                 }
             }
 
+            if (message == (uint) WindowMessages.ShowWindow)
+            {
+                debug.text += WindowMessages.ShowWindow.ToString();
+            }
+            
             if (message == (uint) WindowMessages.NCHITTEST)
             {
                 if (!_isMouseOver)
@@ -281,12 +285,12 @@ namespace Borderless
         {
             User32.SetWindowLongPtr(HandledWindow, (int) WindowLongIndex.Style, (IntPtr) WindowStyleFlags.Visible);
 
-            var margins = new Margins
-            {
-                leftWidth = -1
-            };
+//            var margins = new Margins
+//            {
+//                leftWidth = -1
+//            };
 
-            DwmApi.DwmExtendFrameIntoClientArea(HandledWindow.Handle, ref margins);
+//            DwmApi.DwmExtendFrameIntoClientArea(HandledWindow.Handle, ref margins);
         }
 
         protected virtual void SetWindowDefaultSize()
@@ -297,13 +301,13 @@ namespace Borderless
             centerWindow.x = (info.MonitorRect.Width - StartWindowSize.x) / 2f;
             centerWindow.y = (info.MonitorRect.Height - StartWindowSize.y) / 2f;
 
-            debug.text += "\n" + "Monitor Width: " + info.MonitorName.Length;
-            debug.text += "\n" + "Monitor Width: " + info.MonitorRect.Width;
-            debug.text += "\n" + "Monitor Height: " + info.MonitorRect.Height;
-            debug.text += "\n" + "StartWindowSize.x: " + StartWindowSize.x;
-            debug.text += "\n" + "StartWindowSize.y: " + StartWindowSize.y;
-            debug.text += "\n" + "centerWindow.x: " + centerWindow.x;
-            debug.text += "\n" + "centerWindow.y: " + centerWindow.y;
+//            debug.text += "\n" + "Monitor Width: " + info.MonitorName.Length;
+//            debug.text += "\n" + "Monitor Width: " + info.MonitorRect.Width;
+//            debug.text += "\n" + "Monitor Height: " + info.MonitorRect.Height;
+//            debug.text += "\n" + "StartWindowSize.x: " + StartWindowSize.x;
+//            debug.text += "\n" + "StartWindowSize.y: " + StartWindowSize.y;
+//            debug.text += "\n" + "centerWindow.x: " + centerWindow.x;
+//            debug.text += "\n" + "centerWindow.y: " + centerWindow.y;
 
             const uint message = (uint)
             (
@@ -364,31 +368,3 @@ namespace Borderless
         #endregion
     }
 }
-
-
-//if (sizingSide == (int) SizingWindowSide.Left || sizingSide == (int) SizingWindowSide.Right)
-//{
-////Left or right resize -> adjust height (bottom)
-//rect.Bottom = rect.Top + (int) (HeightRatio * rect.Width / WidthRatio);
-//}
-//else if (sizingSide == (int) SizingWindowSide.Top || sizingSide == (int) SizingWindowSide.Bottom)
-//{
-////Up or down resize -> adjust width (right)
-//rect.Right = rect.Left + (int) (WidthRatio * rect.Height / HeightRatio);
-//}
-//else if (sizingSide == (int) SizingWindowSide.BottomRight ||
-//sizingSide == (int) SizingWindowSide.BottomLeft)
-//{
-////Lower-right corner resize -> adjust height (could have been width)
-//rect.Bottom = rect.Top + (int) (HeightRatio * rect.Width / WidthRatio);
-//}
-//else if (sizingSide == (int) SizingWindowSide.TopLeft)
-//{
-////Upper-left corner -> adjust width (could have been height)
-//rect.Left = rect.Right - (int) (WidthRatio * rect.Height / HeightRatio);
-//}
-//else if (sizingSide == (int) SizingWindowSide.TopRight)
-//{
-////Upper-right corner -> adjust width (could have been height)
-//rect.Right = rect.Left + (int) (WidthRatio * rect.Height / HeightRatio);
-//}

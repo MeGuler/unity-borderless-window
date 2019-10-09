@@ -1,10 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ContentModelStore">
-    <e p="C:\Users\Maritimetainer\.Rider2019.1\system\extResources" t="IncludeRecursive" />
-    <e p="C:\Users\Maritimetainer\.Rider2019.1\system\resharper-host\local\Transient\ReSharperHost\v191\SolutionCaches\_unity-borderless-window.2074181361.00" t="ExcludeRecursive" />
-    <e p="D:\Z - Works\Personel\unity-borderless-window" t="IncludeRecursive">
-      <e p="Assembly-CSharp-Editor.csproj" t="IncludeRecursive" />
+    <e p="C:\Users\Maritimetainer\.Rider2019.2\system\extResources" t="IncludeRecursive" />
+    <e p="C:\Users\Maritimetainer\.Rider2019.2\system\resharper-host\local\Transient\ReSharperHost\v192\SolutionCaches\_unity-borderless-window.-1373358282.00" t="ExcludeRecursive" />
+    <e p="D:\X - Personal\Unity\unity-borderless-window" t="IncludeRecursive">
       <e p="Assembly-CSharp.csproj" t="IncludeRecursive" />
       <e p="Assets" t="Include">
         <e p="__Project" t="Include">
@@ -12,15 +11,15 @@
             <e p="Extensions" t="Include">
               <e p="MathExtension.cs" t="Include" />
             </e>
-            <e p="TransparentMaker.cs" t="Include" />
             <e p="Window" t="Include">
               <e p="Base" t="Include">
                 <e p="Cursor.cs" t="Include" />
                 <e p="Window.cs" t="Include" />
               </e>
               <e p="BorderlessWindow.cs" t="Include" />
+              <e p="TransparentMaker.cs" t="Include" />
             </e>
-            <e p="Window - Manual Size" t="Include">
+            <e p="Window - Manuel Size" t="Include">
               <e p="CursorData.cs" t="Include" />
               <e p="Managers" t="Include">
                 <e p="CursorManager.cs" t="Include" />
@@ -55,38 +54,7 @@
             </e>
           </e>
           <e p="Shaders" t="Include">
-            <e p="ChromakeyTransparent.shader" t="Include" />
             <e p="MakeTransparent.shader" t="Include" />
-          </e>
-        </e>
-        <e p="_Third Party" t="Include">
-          <e p="ProceduralUIImage" t="Include">
-            <e p="Editor" t="Include">
-              <e p="FreeModifierEditor.cs" t="Include" />
-              <e p="ModifierUtility.cs" t="Include" />
-              <e p="ProceduralImageEditor.cs" t="Include" />
-              <e p="ProceduralImageEditorUtility.cs" t="Include" />
-            </e>
-            <e p="Resources" t="Include">
-              <e p="Shaders" t="Include">
-                <e p="ProceduralImageRuntime.shader" t="Include" />
-              </e>
-            </e>
-            <e p="Scripts" t="Include">
-              <e p="Attributes" t="Include">
-                <e p="ModifierID.cs" t="Include" />
-              </e>
-              <e p="EmptySprite.cs" t="Include" />
-              <e p="Modifiers" t="Include">
-                <e p="CustomPremadeModifier.cs" t="Include" />
-                <e p="FreeModifier.cs" t="Include" />
-                <e p="OnlyOneEdgeModifier.cs" t="Include" />
-                <e p="RoundModifier.cs" t="Include" />
-                <e p="UniformModifier.cs" t="Include" />
-              </e>
-              <e p="ProceduralImage.cs" t="Include" />
-              <e p="ProceduralImageModifier.cs" t="Include" />
-            </e>
           </e>
         </e>
         <e p="TextMesh Pro" t="Include">

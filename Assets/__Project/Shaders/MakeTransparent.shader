@@ -44,17 +44,21 @@ Shader "Custom/MakeTransparent" {
 
 			float4 PixelShaderFunction(VertexToPixelData input) : SV_Target
 			{
+			    // What is the color that *would* be rendered here?
 				float4 color = tex2D(_MainTex, input.uv);
 			
+			     // Calculate the different in each component from the chosen transparency color
 				float deltaR = abs(color.r - _TransparentColorKey.r);
 				float deltaG = abs(color.g - _TransparentColorKey.g);
 				float deltaB = abs(color.b - _TransparentColorKey.b);
 
+                // If color is within tolerance, write a transparent pixel
 				if (deltaR < _TransparencyMargin && deltaG < _TransparencyMargin && deltaB < _TransparencyMargin)
 				{
 					return float4(0.0f, 0.0f, 0.0f, 0.0f);
 				}
 
+                // Otherwise, return the regular color
 				return color;
 			}
 			ENDCG
