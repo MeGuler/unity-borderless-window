@@ -31,6 +31,7 @@
             <e p="Windows Api" t="Include">
               <e p="Apis" t="Include">
                 <e p="DwmApi.cs" t="Include" />
+                <e p="kernel32.cs" t="Include" />
                 <e p="User32.cs" t="Include" />
               </e>
               <e p="Flags" t="Include">

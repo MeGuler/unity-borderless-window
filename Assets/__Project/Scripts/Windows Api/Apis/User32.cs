@@ -7,8 +7,19 @@ using Point = Borderless.Api.Structures.Point;
 
 namespace Borderless.Api
 {
-    public class User32
+    public static class User32
     {
+        public const string UnityWindowClassName = "UnityWndClass";
+
+
+        #region Delegates
+
+        #region EnumWindowsProc
+
+        public delegate bool EnumWindowsProc(IntPtr hWnd, IntPtr lParam);
+
+        #endregion
+
         #region WindowProcedureDelegate
 
         public delegate IntPtr WindowProcedureDelegate
@@ -18,6 +29,8 @@ namespace Borderless.Api
             IntPtr firstParameter,
             IntPtr secondParameter
         );
+
+        #endregion
 
         #endregion
 
@@ -31,6 +44,21 @@ namespace Borderless.Api
 
 
         #region Window Methods
+
+        #region EnumThreadWindows
+
+        [DllImport("user32.dll")]
+        [return: MarshalAs(UnmanagedType.Bool)]
+        public static extern bool EnumThreadWindows(uint dwThreadId, EnumWindowsProc lpEnumFunc, IntPtr lParam);
+
+        #endregion
+
+        #region GetClassName
+
+        [DllImport("user32.dll", CharSet = CharSet.Auto, SetLastError = true)]
+        public static extern int GetClassName(IntPtr hWnd, StringBuilder lpString, int nMaxCount);
+
+        #endregion
 
         #region GetActiveWindow
 

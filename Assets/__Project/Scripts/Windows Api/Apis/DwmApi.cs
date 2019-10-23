@@ -4,7 +4,7 @@ using Borderless.Api.Structures;
 
 namespace Borderless.Api
 {
-    public class DwmApi
+    public static class DwmApi
     {
         #region DwmExtendFrameIntoClientArea
 

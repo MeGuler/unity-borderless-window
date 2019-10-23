@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
 using System.Security.Permissions;
+using System.Text;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using Borderless.Api;
@@ -37,6 +38,7 @@ namespace Borderless
         #endregion
 
         private bool _isMouseOver;
+        private bool _initialized;
 
 
         private Vector2 _aspectRatio;
@@ -47,6 +49,7 @@ namespace Borderless
         {
             SettingMinMaxWindowSize();
 
+            HandleWindow();
             InitializeWindowProcedure();
             SetWindowStyle();
             SetWindowDefaultSize();
@@ -62,7 +65,7 @@ namespace Borderless
 
         protected virtual void OnGUI()
         {
-            if (HandledWindow.Handle == IntPtr.Zero)
+            if (!_initialized)
             {
                 InitializeWindowProcedure();
             }
@@ -131,11 +134,30 @@ namespace Borderless
 
         #region Window Procedure Methods
 
+        protected void HandleWindow()
+        {
+            //https://gist.github.com/mattbenic/908483ad0bedbc62ab17
+            var threadId = kernel32.GetCurrentThreadId();
+            User32.EnumThreadWindows(threadId, (hWnd, lParam) =>
+            {
+                var classText = new StringBuilder(User32.UnityWindowClassName.Length + 1);
+                User32.GetClassName(hWnd, classText, classText.Capacity);
+                if (classText.ToString() == User32.UnityWindowClassName)
+                {
+                    HandledWindow = new HandleRef(null, hWnd);
+                    return false;
+                }
+
+                return true;
+            }, IntPtr.Zero);
+        }
+
         protected virtual void InitializeWindowProcedure()
         {
             if (NewWindowProcedure != null) return;
 
-            HandledWindow = new HandleRef(null, User32.GetForegroundWindow());
+            _initialized = true;
+
             NewWindowProcedure = WindowProcedure;
             NewWindowProcedurePtr = Marshal.GetFunctionPointerForDelegate(NewWindowProcedure);
             OldWindowProcedurePtr = User32.SetWindowLongPtr(HandledWindow, -4, NewWindowProcedurePtr);
@@ -145,8 +167,9 @@ namespace Borderless
         {
             if (NewWindowProcedure == null) return;
 
+            _initialized = false;
+
             User32.SetWindowLongPtr(HandledWindow, -4, OldWindowProcedurePtr);
-            HandledWindow = new HandleRef(null, IntPtr.Zero);
             OldWindowProcedurePtr = IntPtr.Zero;
             NewWindowProcedurePtr = IntPtr.Zero;
             NewWindowProcedure = null;
@@ -184,7 +207,7 @@ namespace Borderless
             {
                 debug.text += WindowMessages.ShowWindow.ToString();
             }
-            
+
             if (message == (uint) WindowMessages.NCHITTEST)
             {
                 if (!_isMouseOver)

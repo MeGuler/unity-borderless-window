@@ -1,4 +1,7 @@
-﻿using Borderless.Api;
+﻿using System;
+using System.Runtime.InteropServices;
+using System.Text;
+using Borderless.Api;
 using Borderless.Flags;
 using UnityEngine;
 using UnityEngine.UI;
@@ -77,5 +80,47 @@ namespace Borderless
 
             User32.SetWindowPlacement(HandledWindow.Handle, ref placement);
         }
+
+
+//        #region DLL Imports
+//        private const string UnityWindowClassName = "UnityWndClass";
+
+//        [DllImport("kernel32.dll")]
+//        static extern uint GetCurrentThreadId();
+
+//        [DllImport("user32.dll", CharSet = CharSet.Auto, SetLastError = true)]
+//        static extern int GetClassName(IntPtr hWnd, StringBuilder lpString, int nMaxCount);
+
+//        public delegate bool EnumWindowsProc(IntPtr hWnd, IntPtr lParam);
+
+//        [DllImport("user32.dll")]
+//        [return: MarshalAs(UnmanagedType.Bool)]
+//        static extern bool EnumThreadWindows(uint dwThreadId, EnumWindowsProc lpEnumFunc, IntPtr lParam);
+//        #endregion
+
+//        #region Private fields
+//        private static IntPtr windowHandle = IntPtr.Zero;
+//        #endregion
+
+//        #region Monobehavior implementation
+//        /// <summary>
+//        /// Called when this component is initialized
+//        /// </summary>
+        void Start()
+        {
+//            HandleWindow();
+
+            Debug.Log(string.Format("Window Handle: {0}", HandledWindow.Handle));
+        }
+
+       
+
+        protected override void OnGUI()
+        {
+            base.OnGUI();
+            GUILayout.Label("Window Handle: " + HandledWindow.Handle);
+        }
+
+//        #endregion
     }
 }

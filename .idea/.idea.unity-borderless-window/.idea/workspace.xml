@@ -8,35 +8,6 @@
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
-  <component name="FindInProjectRecents">
-    <findStrings>
-      <find>Collapse</find>
-      <find>Show</find>
-      <find>handleWindow</find>
-      <find>hwnd</find>
-      <find>ShowW</find>
-      <find>0x2000000</find>
-      <find>0x02000000</find>
-      <find>WM_NCHITTEST</find>
-      <find>0x20000</find>
-      <find>CLIENT</find>
-      <find>WM_GETMINMAXINFO</find>
-      <find>maxwindowSize</find>
-      <find>DebugGui</find>
-      <find>GUIText</find>
-      <find>S</find>
-      <find>setwindowpos</find>
-      <find>getwin</find>
-      <find>GetActiveWindow</find>
-      <find>WindowManager</find>
-      <find>cursor</find>
-      <find>SendMessage</find>
-      <find>LockWindowUpdate</find>
-      <find>.EventSystems;</find>
-      <find>Place</find>
-      <find>h</find>
-    </findStrings>
-  </component>
   <component name="HighlightingSettingsPerFile">
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/08A73C22-71E8-4174-A007-0AD56CBC0910/5b/015b5de0/POINT.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/__Project/Scripts/Windows Api/Apis/DwmApi.cs" root0="FORCE_HIGHLIGHTING" />
@@ -51,6 +22,7 @@
     <setting file="file://$PROJECT_DIR$/Assets/__Project/Scripts/Windows Api/Flags/MonitorFlags.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/__Project/Scripts/Windows Api/Flags/SetWindowPosFlags.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/__Project/Scripts/Windows Api/Flags/SizingWindowSide.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Assets/__Project/Scripts/Windows Api/Apis/kernel32.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/__Project/Scripts/Windows Api/Structures/Rect.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/__Project/Scripts/Windows Api/Structures/MonitorInfo.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/TextMesh Pro/Examples &amp; Extras/Scripts/Benchmark01.cs" root0="FORCE_HIGHLIGHTING" />
@@ -66,6 +38,7 @@
     <setting file="file://$PROJECT_DIR$/Assets/__Project/Scripts/Window - Manuel Size/Managers/CursorManager.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/TextMesh Pro/Examples &amp; Extras/Scripts/TMP_DigitValidator.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/__Project/Scripts/Extensions/MathExtension.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/EF28F193-EAB6-4E49-B44B-3FB27EAB4F75/b0/9948a06e/HandleRef.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/__Project/Scripts/Window - Manuel Size/Managers/WindowManager.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/08A73C22-71E8-4174-A007-0AD56CBC0910/c3/53484688/RECT.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/__Project/Scripts/Windows Api/Apis/User32.cs" root0="FORCE_HIGHLIGHTING" />
@@ -73,9 +46,6 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/Assets/_Third Party/TransparentWindow/TransparentWindowManager/Scripts/TransparentWindowManager.cs" />
-        <option value="$PROJECT_DIR$/Assets/__Project/Scripts/TransparentMaker.cs" />
-        <option value="$PROJECT_DIR$/Assets/__Project/Scripts/WindowStyle/v2/BorderlessWindow.cs" />
         <option value="$PROJECT_DIR$/Assets/__Project/Scripts/WindowStyle/v2/Window.cs" />
         <option value="$PROJECT_DIR$/Assets/__Project/Scripts/TEST.cs" />
         <option value="$PROJECT_DIR$/Assets/__Project/Scripts/WindowStyle/WinApi/WinApi.cs" />
@@ -110,7 +80,6 @@
         <option value="$PROJECT_DIR$/Assets/__Project/Scripts/Windows Api/Flags/SizingWindowSide.cs" />
         <option value="$PROJECT_DIR$/Assets/__Project/Scripts/Extensions/MathExtension.cs" />
         <option value="$PROJECT_DIR$/Assets/__Project/Scripts/Windows Api/Flags/MonitorFlags.cs" />
-        <option value="$PROJECT_DIR$/Assets/__Project/Scripts/Windows Api/Apis/User32.cs" />
         <option value="$PROJECT_DIR$/Assets/__Project/Scripts/Windows Api/Structures/MonitorInfo.cs" />
         <option value="$PROJECT_DIR$/Assets/__Project/Shaders/ChromakeyTransparent.shader" />
         <option value="$PROJECT_DIR$/Assets/__Project/Scripts/Window - Manual Size/Managers/CursorManager.cs" />
@@ -122,7 +91,11 @@
         <option value="$PROJECT_DIR$/Assets/__Project/Scripts/Window - Manuel Size/Managers/WindowManager.cs" />
         <option value="$PROJECT_DIR$/Assets/__Project/Shaders/MakeTransparent.shader" />
         <option value="$PROJECT_DIR$/Assets/__Project/Scripts/Window/TransparentMaker.cs" />
+        <option value="$PROJECT_DIR$/Assets/__Project/Scripts/Windows Api/Apis/kernel32Api.cs" />
+        <option value="$PROJECT_DIR$/Assets/__Project/Scripts/Windows Api/Apis/DwmApi.cs" />
+        <option value="$PROJECT_DIR$/Assets/__Project/Scripts/Windows Api/Apis/kernel32.cs" />
         <option value="$PROJECT_DIR$/Assets/__Project/Scripts/Window/BorderlessWindow.cs" />
+        <option value="$PROJECT_DIR$/Assets/__Project/Scripts/Windows Api/Apis/User32.cs" />
         <option value="$PROJECT_DIR$/Assets/__Project/Scripts/Window/Base/Window.cs" />
       </list>
     </option>
@@ -197,6 +170,7 @@
       <workItem from="1564467080032" duration="18449000" />
       <workItem from="1570605680651" duration="4282000" />
       <workItem from="1570619955003" duration="2991000" />
+      <workItem from="1571825804679" duration="4239000" />
     </task>
     <servers />
   </component>
