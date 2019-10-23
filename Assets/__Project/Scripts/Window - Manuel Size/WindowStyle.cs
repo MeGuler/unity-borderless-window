@@ -99,7 +99,7 @@ namespace Borderless.Deprecated
 //        i++;
 //        debug.text = "Run" + i;
 
-            if (message == (uint) WindowMessages.NCDESTROY || message == (uint) WindowMessages.WINDOWPOSCHANGING)
+            if (message == (uint) WindowMessages.NcDestroy || message == (uint) WindowMessages.WindowPosChanging)
             {
                 TerminateWindowProcedure();
             }
@@ -109,27 +109,27 @@ namespace Borderless.Deprecated
                 debug.text = ((WindowMessages) message).ToString();
             }
 
-            if (message == (uint) WindowMessages.SIZECLIPBOARD)
+            if (message == (uint) WindowMessages.SizeClipboard)
             {
                 debug.text = ((WindowMessages) message).ToString();
             }
 
-            if (message == (uint) WindowMessages.NCCALCSIZE)
+            if (message == (uint) WindowMessages.NcCalcSize)
             {
                 debug.text = ((WindowMessages) message).ToString();
             }
 
-            if (message == (uint) WindowMessages.EXITSIZEMOVE)
+            if (message == (uint) WindowMessages.ExitSizeMove)
             {
                 debug.text = ((WindowMessages) message).ToString();
             }
 
-            if (message == (uint) WindowMessages.ENTERSIZEMOVE)
+            if (message == (uint) WindowMessages.EnterSizeMove)
             {
                 debug.text = ((WindowMessages) message).ToString();
             }
 
-            if (message == (uint) WindowMessages.SIZING)
+            if (message == (uint) WindowMessages.Sizing)
             {
                 debug.text = ((WindowMessages) message).ToString();
             }

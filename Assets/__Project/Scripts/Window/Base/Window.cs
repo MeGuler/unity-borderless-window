@@ -185,17 +185,17 @@ namespace Borderless
         {
             //todo: Check ForgroundWindow
 
-            if (message == (uint) WindowMessages.NCDESTROY || message == (uint) WindowMessages.WINDOWPOSCHANGING)
+            if (message == (uint) WindowMessages.NcDestroy || message == (uint) WindowMessages.WindowPosChanging)
             {
                 TerminateWindowProcedure();
             }
 
-            if (message == (uint) WindowMessages.GETMINMAXINFO)
+            if (message == (uint) WindowMessages.GetMinMaxInfo)
             {
                 GetMinMaxInfo(lParam);
             }
 
-            if (message == (uint) WindowMessages.SIZING)
+            if (message == (uint) WindowMessages.Sizing)
             {
                 if (KeepAspectRatio)
                 {
@@ -205,10 +205,20 @@ namespace Borderless
 
             if (message == (uint) WindowMessages.ShowWindow)
             {
-                debug.text += WindowMessages.ShowWindow.ToString();
+                debug.text += WindowMessages.ShowWindow + "\n";
             }
 
-            if (message == (uint) WindowMessages.NCHITTEST)
+            if (message == (uint) WindowMessages.WindowPosChanged)
+            {
+                debug.text += WindowMessages.WindowPosChanged + "\n";
+            }
+
+            if (message == (uint) WindowMessages.WindowPosChanging)
+            {
+                debug.text += WindowMessages.WindowPosChanging + "\n";
+            }
+            
+            if (message == (uint) WindowMessages.NcHitTest)
             {
                 if (!_isMouseOver)
                 {

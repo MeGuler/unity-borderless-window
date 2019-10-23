@@ -46,7 +46,6 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/Assets/__Project/Scripts/WindowStyle/v2/Window.cs" />
         <option value="$PROJECT_DIR$/Assets/__Project/Scripts/TEST.cs" />
         <option value="$PROJECT_DIR$/Assets/__Project/Scripts/WindowStyle/WinApi/WinApi.cs" />
         <option value="$PROJECT_DIR$/Assets/__Project/Scripts/v2/Window.cs" />
@@ -96,6 +95,7 @@
         <option value="$PROJECT_DIR$/Assets/__Project/Scripts/Windows Api/Apis/kernel32.cs" />
         <option value="$PROJECT_DIR$/Assets/__Project/Scripts/Window/BorderlessWindow.cs" />
         <option value="$PROJECT_DIR$/Assets/__Project/Scripts/Windows Api/Apis/User32.cs" />
+        <option value="$PROJECT_DIR$/Assets/__Project/Scripts/Windows Api/Flags/WindowMessages.cs" />
         <option value="$PROJECT_DIR$/Assets/__Project/Scripts/Window/Base/Window.cs" />
       </list>
     </option>
@@ -171,6 +171,7 @@
       <workItem from="1570605680651" duration="4282000" />
       <workItem from="1570619955003" duration="2991000" />
       <workItem from="1571825804679" duration="4239000" />
+      <workItem from="1571833813363" duration="4798000" />
     </task>
     <servers />
   </component>
