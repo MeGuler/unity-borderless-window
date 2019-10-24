@@ -312,8 +312,8 @@ namespace Borderless.Deprecated
 //        else
 //        {
             WindowManager.ShowWindow(WindowManager.Maximized
-                ? ShowWindowCommands.Maximize
-                : ShowWindowCommands.Restore);
+                ? WindowShowCommands.Maximize
+                : WindowShowCommands.Restore);
 //        }
         }
 
@@ -359,7 +359,7 @@ namespace Borderless.Deprecated
 
         public void Minimize()
         {
-            WindowManager.ShowWindow(ShowWindowCommands.Minimize);
+            WindowManager.ShowWindow(WindowShowCommands.Minimize);
         }
 
         public void Maximize()

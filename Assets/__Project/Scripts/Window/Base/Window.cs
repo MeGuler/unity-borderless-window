@@ -9,12 +9,50 @@ using Borderless.Api;
 using Borderless.Api.Structures;
 using Borderless.Flags;
 using TMPro;
+using UnityEngine.Experimental.UIElements;
 
 
 namespace Borderless
 {
     public class Window : MonoBehaviour
     {
+//        public User32.WinEventDelegate EventProcedure { get; protected set; }
+//
+//        protected void WinEventProc(IntPtr hWinEventHook, uint eventType, IntPtr hwnd, int idObject, int idChild,
+//            uint dwEventThread, uint dwmsEventTime)
+//        {
+//            debug.text += "hWinEventHook : " + hWinEventHook.ToInt32() + "\n";
+//            debug.text += "eventType : " + eventType + "\n";
+//            debug.text += "hwnd : " + hwnd.ToInt32() + "\n";
+//            debug.text += "idObject : " + idObject + "\n";
+//            debug.text += "idChild : " + idChild + "\n";
+//            debug.text += "dwEventThread : " + dwEventThread + "\n";
+//            debug.text += "dwmsEventTime : " + dwmsEventTime + "\n";
+//            debug.text += "=========================================================" + "\n";
+//        }
+//
+//        private IntPtr eventHook;
+//        private void OnEnable()
+//        {
+//            EventProcedure = WinEventProc;
+//            eventHook = User32.SetWinEventHook
+//            (
+//                WinEvents.EVENT_SYSTEM_FOREGROUND,
+//                WinEvents.EVENT_SYSTEM_FOREGROUND,
+//                HandledWindow.Handle,
+//                EventProcedure,
+//                0,
+//                0,
+//                WinEvents.WINEVENT_OUTOFCONTEXT
+//            );
+//        }
+//
+//        private void OnDisable()
+//        {
+//            User32.UnhookWinEvent(eventHook);
+//        }
+
+
         #region Window Procedure Properties
 
         public HandleRef HandledWindow { get; protected set; }
@@ -59,8 +97,6 @@ namespace Borderless
 
             _aspectRatio.x = aspectRatioX;
             _aspectRatio.y = aspectRatioY;
-
-//            debug.text += "\n" + _aspectRatio.x + " / " + _aspectRatio.y;
         }
 
         protected virtual void OnGUI()
@@ -183,7 +219,10 @@ namespace Borderless
         [PermissionSet(SecurityAction.Demand, Name = "FullTrust")]
         protected virtual IntPtr WindowProcedure(IntPtr handleWindow, uint message, IntPtr wParam, IntPtr lParam)
         {
-            //todo: Check ForgroundWindow
+            if (handleWindow != HandledWindow.Handle)
+            {
+                return IntPtr.Zero;
+            }
 
             if (message == (uint) WindowMessages.NcDestroy || message == (uint) WindowMessages.WindowPosChanging)
             {
@@ -203,21 +242,77 @@ namespace Borderless
                 }
             }
 
-            if (message == (uint) WindowMessages.ShowWindow)
+
+//            if (message == (uint) WindowMessages.SystemCommand)
+//            {
+//                var combinedWParam = (uint) wParam & (uint) SystemCommandParameters.WParamCombineValue;
+//                var systemCommandParameter = (SystemCommandParameters) combinedWParam;
+//
+//                debug.text += WindowMessages.SystemCommand + " / wParam : " + systemCommandParameter + "\n";
+//            }
+//
+//            if (message == (uint) WindowMessages.ShowWindow)
+//            {
+//                debug.text += WindowMessages.ShowWindow + " / wParam : " + wParam + " / lParam : " + lParam + "\n";
+//            }
+//
+//            if (message == (uint) WindowMessages.SizeClipboard)
+//            {
+//                debug.text += WindowMessages.SizeClipboard + " / wParam : " + wParam + " / lParam : " + lParam + "\n";
+//            }
+//
+//            if (message == (uint) WindowMessages.WindowPosChanging)
+//            {
+//                debug.text += WindowMessages.WindowPosChanging + " / wParam : " + wParam + " / lParam : " + lParam +
+//                              "\n";
+//            }
+//
+//            if (message == (uint) WindowMessages.StyleChanging)
+//            {
+//                debug.text += WindowMessages.StyleChanging + " / wParam : " + wParam + " / lParam : " + lParam + "\n";
+//            }
+//
+//            if (message == (uint) WindowMessages.PaletteIsChanging)
+//            {
+//                debug.text += WindowMessages.PaletteIsChanging + " / wParam : " + wParam + " / lParam : " + lParam +
+//                              "\n";
+//            }
+
+            if (message != (uint) WindowMessages.Close &&
+                message != (uint) WindowMessages.Input &&
+                message != (uint) WindowMessages.WindowPosChanging &&
+                message != (uint) WindowMessages.MouseMove &&
+                message != (uint) WindowMessages.MouseActivate &&
+                message != (uint) WindowMessages.MouseHover &&
+                message != (uint) WindowMessages.MouseFirst &&
+                message != (uint) WindowMessages.MouseLast &&
+                message != (uint) WindowMessages.MouseLeave &&
+                message != (uint) WindowMessages.MouseWheel &&
+                message != (uint) WindowMessages.NC_MouseMove &&
+                message != (uint) WindowMessages.NC_MouseHover &&
+                message != (uint) WindowMessages.NC_MouseLeave &&
+                message != (uint) WindowMessages.LeftButtonDown &&
+                message != (uint) WindowMessages.LeftButtonUp &&
+                message != (uint) WindowMessages.LeftButtonDoubleClick &&
+                message != (uint) WindowMessages.NC_LeftButtonDown &&
+                message != (uint) WindowMessages.NC_LeftButtonUp &&
+                message != (uint) WindowMessages.NC_LeftButtonDoubleClick &&
+                message != (uint) WindowMessages.SetCursor &&
+                message != (uint) WindowMessages.NcHitTest &&
+                message != (uint) WindowMessages.Moving &&
+                message != (uint) WindowMessages.IME_SetContext &&
+                message != (uint) WindowMessages.CaptureChanged
+            )
             {
-                debug.text += WindowMessages.ShowWindow + "\n";
+                debug.text += (WindowMessages) message + " / wParam : " + wParam + " / lParam : " + lParam +
+                             "\n";
             }
 
-            if (message == (uint) WindowMessages.WindowPosChanged)
-            {
-                debug.text += WindowMessages.WindowPosChanged + "\n";
-            }
-
-            if (message == (uint) WindowMessages.WindowPosChanging)
-            {
-                debug.text += WindowMessages.WindowPosChanging + "\n";
-            }
             
+            
+            
+//            debug.text = ((WindowMessages)message).ToString() + "\n";
+
             if (message == (uint) WindowMessages.NcHitTest)
             {
                 if (!_isMouseOver)
@@ -230,7 +325,6 @@ namespace Borderless
                     }
                 }
             }
-
 
             return User32.CallWindowProc(OldWindowProcedurePtr, handleWindow, message, wParam, lParam);
         }
@@ -309,9 +403,9 @@ namespace Borderless
 
         #region Window Manager Methods
 
-        protected virtual void ShowWindow(ShowWindowCommands showWindowStatus)
+        protected virtual void ShowWindow(WindowShowCommands windowShowStatus)
         {
-            User32.ShowWindow(HandledWindow.Handle, (int) showWindowStatus);
+            User32.ShowWindow(HandledWindow.Handle, (int) windowShowStatus);
         }
 
         protected virtual void SetWindowStyle()
@@ -333,14 +427,6 @@ namespace Borderless
             Vector2 centerWindow;
             centerWindow.x = (info.MonitorRect.Width - StartWindowSize.x) / 2f;
             centerWindow.y = (info.MonitorRect.Height - StartWindowSize.y) / 2f;
-
-//            debug.text += "\n" + "Monitor Width: " + info.MonitorName.Length;
-//            debug.text += "\n" + "Monitor Width: " + info.MonitorRect.Width;
-//            debug.text += "\n" + "Monitor Height: " + info.MonitorRect.Height;
-//            debug.text += "\n" + "StartWindowSize.x: " + StartWindowSize.x;
-//            debug.text += "\n" + "StartWindowSize.y: " + StartWindowSize.y;
-//            debug.text += "\n" + "centerWindow.x: " + centerWindow.x;
-//            debug.text += "\n" + "centerWindow.y: " + centerWindow.y;
 
             const uint message = (uint)
             (

@@ -2289,7 +2289,7 @@ MonoBehaviour:
   minWindowSize: {x: 0, y: 0}
   maxWindowSize: {x: 1280, y: 720}
   captionHeight: 35
-  keepAspectRatio: 1
+  keepAspectRatio: 0
   maximizeImage: {fileID: 1252391444}
   maximizeIcon1: {fileID: 21300000, guid: 95a960762eab97e498471354b907b2f7, type: 3}
   maximizeIcon2: {fileID: 21300000, guid: 89f23e4eb4103f34c8ab5024b5af6c58, type: 3}

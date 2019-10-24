@@ -18,10 +18,11 @@
     <setting file="file://$PROJECT_DIR$/Assets/__Project/Scripts/Window/Base/Window.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/TextMesh Pro/Examples &amp; Extras/Scripts/SkewTextExample.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/__Project/Scripts/Windows Api/Flags/WindowLongIndex.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/Assets/__Project/Scripts/Windows Api/Flags/ShowWindowCommands.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Assets/__Project/Scripts/Windows Api/Flags/WindowShowCommands.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/__Project/Scripts/Windows Api/Flags/MonitorFlags.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/__Project/Scripts/Windows Api/Flags/SetWindowPosFlags.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/__Project/Scripts/Windows Api/Flags/SizingWindowSide.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Assets/__Project/Scripts/_TEST/Test.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/__Project/Scripts/Windows Api/Apis/kernel32.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/__Project/Scripts/Windows Api/Structures/Rect.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/__Project/Scripts/Windows Api/Structures/MonitorInfo.cs" root0="FORCE_HIGHLIGHTING" />
@@ -37,18 +38,17 @@
     <setting file="file://$PROJECT_DIR$/Assets/__Project/Scripts/Window/Base/Cursor.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/__Project/Scripts/Window - Manuel Size/Managers/CursorManager.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/TextMesh Pro/Examples &amp; Extras/Scripts/TMP_DigitValidator.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Assets/__Project/Scripts/Windows Api/Apis/WinEvents.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/__Project/Scripts/Extensions/MathExtension.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/EF28F193-EAB6-4E49-B44B-3FB27EAB4F75/b0/9948a06e/HandleRef.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/__Project/Scripts/Window - Manuel Size/Managers/WindowManager.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/08A73C22-71E8-4174-A007-0AD56CBC0910/c3/53484688/RECT.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/__Project/Scripts/Windows Api/Apis/User32.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Assets/__Project/Scripts/Windows Api/Flags/SystemCommandParameters.cs" root0="FORCE_HIGHLIGHTING" />
   </component>
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/Assets/__Project/Scripts/TEST.cs" />
-        <option value="$PROJECT_DIR$/Assets/__Project/Scripts/WindowStyle/WinApi/WinApi.cs" />
-        <option value="$PROJECT_DIR$/Assets/__Project/Scripts/v2/Window.cs" />
         <option value="$PROJECT_DIR$/Assets/__Project/Scripts/WindowStyle/WindowStyle.cs" />
         <option value="$PROJECT_DIR$/Assets/__Project/Scripts/Window/WinApi/Flags/WinApiFlags.cs" />
         <option value="$PROJECT_DIR$/Assets/__Project/Scripts/Window/WinApi/Flags/HitTestValues.cs" />
@@ -91,12 +91,15 @@
         <option value="$PROJECT_DIR$/Assets/__Project/Shaders/MakeTransparent.shader" />
         <option value="$PROJECT_DIR$/Assets/__Project/Scripts/Window/TransparentMaker.cs" />
         <option value="$PROJECT_DIR$/Assets/__Project/Scripts/Windows Api/Apis/kernel32Api.cs" />
-        <option value="$PROJECT_DIR$/Assets/__Project/Scripts/Windows Api/Apis/DwmApi.cs" />
         <option value="$PROJECT_DIR$/Assets/__Project/Scripts/Windows Api/Apis/kernel32.cs" />
-        <option value="$PROJECT_DIR$/Assets/__Project/Scripts/Window/BorderlessWindow.cs" />
+        <option value="$PROJECT_DIR$/Assets/__Project/Scripts/_TEST/Test.cs" />
+        <option value="$PROJECT_DIR$/Assets/__Project/Scripts/Windows Api/Apis/DwmApi.cs" />
         <option value="$PROJECT_DIR$/Assets/__Project/Scripts/Windows Api/Apis/User32.cs" />
+        <option value="$PROJECT_DIR$/Assets/__Project/Scripts/Windows Api/Apis/WinEvents.cs" />
+        <option value="$PROJECT_DIR$/Assets/__Project/Scripts/Windows Api/Flags/SystemCommandParameters.cs" />
         <option value="$PROJECT_DIR$/Assets/__Project/Scripts/Windows Api/Flags/WindowMessages.cs" />
         <option value="$PROJECT_DIR$/Assets/__Project/Scripts/Window/Base/Window.cs" />
+        <option value="$PROJECT_DIR$/Assets/__Project/Scripts/Window/BorderlessWindow.cs" />
       </list>
     </option>
   </component>
@@ -128,10 +131,10 @@
       <option name="userSelectedPid" value="false" />
       <method v="2" />
     </configuration>
-    <configuration name="Attach to Unity Editor" type="UNITY_DEBUG_RUN_CONFIGURATION" factoryName="Unity Debug" show_console_on_std_err="false" show_console_on_std_out="false" port="50000" address="localhost" pid="15092">
+    <configuration name="Attach to Unity Editor" type="UNITY_DEBUG_RUN_CONFIGURATION" factoryName="Unity Debug" show_console_on_std_err="false" show_console_on_std_out="false" port="50000" address="localhost" pid="23656">
       <option name="allowRunningInParallel" value="false" />
       <option name="listenPortForConnections" value="false" />
-      <option name="pid" value="15092" />
+      <option name="pid" value="23656" />
       <option name="userSelectedPid" value="false" />
       <method v="2" />
     </configuration>
@@ -172,6 +175,7 @@
       <workItem from="1570619955003" duration="2991000" />
       <workItem from="1571825804679" duration="4239000" />
       <workItem from="1571833813363" duration="4798000" />
+      <workItem from="1571898219290" duration="20945000" />
     </task>
     <servers />
   </component>

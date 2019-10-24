@@ -50,18 +50,19 @@ namespace Borderless
             var placement = GetWindowPlacement();
 
 
-            if (placement.ShowCommand == ShowWindowCommands.Maximize)
+            if (placement.windowShowCommand == WindowShowCommands.Maximize)
             {
                 maximizeImage.sprite = maximizeIcon1;
-                placement.ShowCommand = ShowWindowCommands.Restore;
+                placement.windowShowCommand = WindowShowCommands.Restore;
             }
             else
             {
                 maximizeImage.sprite = maximizeIcon2;
-                placement.ShowCommand = ShowWindowCommands.Maximize;
+                placement.windowShowCommand = WindowShowCommands.Maximize;
             }
 
             User32.SetWindowPlacement(HandledWindow.Handle, ref placement);
+//            User32.ShowWindow(HandledWindow.Handle, (int) placement.windowShowCommand);
         }
 
         public void Minimize()
@@ -69,58 +70,23 @@ namespace Borderless
             var placement = GetWindowPlacement();
 
 
-            if (placement.ShowCommand == ShowWindowCommands.ShowMinimized)
+            if (placement.windowShowCommand == WindowShowCommands.ShowMinimized)
             {
-                placement.ShowCommand = ShowWindowCommands.Restore;
+                placement.windowShowCommand = WindowShowCommands.Restore;
             }
             else
             {
-                placement.ShowCommand = ShowWindowCommands.ShowMinimized;
+                placement.windowShowCommand = WindowShowCommands.ShowMinimized;
             }
 
             User32.SetWindowPlacement(HandledWindow.Handle, ref placement);
         }
 
-
-//        #region DLL Imports
-//        private const string UnityWindowClassName = "UnityWndClass";
-
-//        [DllImport("kernel32.dll")]
-//        static extern uint GetCurrentThreadId();
-
-//        [DllImport("user32.dll", CharSet = CharSet.Auto, SetLastError = true)]
-//        static extern int GetClassName(IntPtr hWnd, StringBuilder lpString, int nMaxCount);
-
-//        public delegate bool EnumWindowsProc(IntPtr hWnd, IntPtr lParam);
-
-//        [DllImport("user32.dll")]
-//        [return: MarshalAs(UnmanagedType.Bool)]
-//        static extern bool EnumThreadWindows(uint dwThreadId, EnumWindowsProc lpEnumFunc, IntPtr lParam);
-//        #endregion
-
-//        #region Private fields
-//        private static IntPtr windowHandle = IntPtr.Zero;
-//        #endregion
-
-//        #region Monobehavior implementation
-//        /// <summary>
-//        /// Called when this component is initialized
-//        /// </summary>
-        void Start()
-        {
-//            HandleWindow();
-
-            Debug.Log(string.Format("Window Handle: {0}", HandledWindow.Handle));
-        }
-
-       
-
         protected override void OnGUI()
         {
             base.OnGUI();
-            GUILayout.Label("Window Handle: " + HandledWindow.Handle);
+            GUI.color = Color.red;
+            GUI.Label(new UnityEngine.Rect(50, 50, 150, 50), "Window Handle: " + HandledWindow.Handle);
         }
-
-//        #endregion
     }
 }

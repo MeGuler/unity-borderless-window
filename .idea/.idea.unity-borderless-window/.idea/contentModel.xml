@@ -8,6 +8,9 @@
       <e p="Assets" t="Include">
         <e p="__Project" t="Include">
           <e p="Scripts" t="Include">
+            <e p="_TEST" t="Include">
+              <e p="Test.cs" t="Include" />
+            </e>
             <e p="Extensions" t="Include">
               <e p="MathExtension.cs" t="Include" />
             </e>
@@ -33,15 +36,17 @@
                 <e p="DwmApi.cs" t="Include" />
                 <e p="kernel32.cs" t="Include" />
                 <e p="User32.cs" t="Include" />
+                <e p="WinEvents.cs" t="Include" />
               </e>
               <e p="Flags" t="Include">
                 <e p="HitTestValues.cs" t="Include" />
                 <e p="MonitorFlags.cs" t="Include" />
                 <e p="SetWindowPosFlags.cs" t="Include" />
-                <e p="ShowWindowCommands.cs" t="Include" />
                 <e p="SizingWindowSide.cs" t="Include" />
+                <e p="SystemCommandParameters.cs" t="Include" />
                 <e p="WindowLongIndex.cs" t="Include" />
                 <e p="WindowMessages.cs" t="Include" />
+                <e p="WindowShowCommands.cs" t="Include" />
                 <e p="WindowStyleFlags.cs" t="Include" />
               </e>
               <e p="Structures" t="Include">

@@ -162,11 +162,11 @@ namespace Borderless.Deprecated
 
         }
 
-        public static void ShowWindow(ShowWindowCommands showWindowStatus)
+        public static void ShowWindow(WindowShowCommands windowShowStatus)
         {
             var activeWindow = User32.GetActiveWindow();
 
-            var status = (int) showWindowStatus;
+            var status = (int) windowShowStatus;
 
             User32.ShowWindow(activeWindow, status);
         }

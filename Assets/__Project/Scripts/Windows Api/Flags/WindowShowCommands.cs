@@ -1,6 +1,6 @@
 namespace Borderless.Flags
 {
-    public enum ShowWindowCommands : uint
+    public enum WindowShowCommands : uint
     {
         /// <summary>Hides the window and activates another window.</summary>
         /// <remarks>See SW_HIDE</remarks>

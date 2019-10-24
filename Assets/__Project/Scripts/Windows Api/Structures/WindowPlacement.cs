@@ -11,7 +11,7 @@ namespace Borderless.Api.Structures
     {
         public int Length;
         public int Flags;
-        public ShowWindowCommands ShowCommand;
+        public WindowShowCommands windowShowCommand;
         public System.Drawing.Point MinPosition;
         public System.Drawing.Point MaxPosition;
         public System.Drawing.Rectangle NormalPosition;
