@@ -1,15 +1,12 @@
-﻿using System;
-using System.Runtime.InteropServices;
-using System.Text;
-using Borderless.Api;
+﻿using Borderless.Api;
 using Borderless.Flags;
 using UnityEngine;
-using UnityEngine.UI;
+
 
 
 namespace Borderless
 {
-    public class BorderlessWindow : Window
+    public class TestBorderlessWindow : TestWindow
     {
         [Header("Window Settings")]
 

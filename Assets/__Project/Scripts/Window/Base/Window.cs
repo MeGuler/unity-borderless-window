@@ -9,7 +9,7 @@ using Borderless.Api;
 using Borderless.Api.Structures;
 using Borderless.Flags;
 using TMPro;
-using UnityEngine.Experimental.UIElements;
+using UnityEngine.UI;
 
 
 namespace Borderless
@@ -75,7 +75,11 @@ namespace Borderless
 
         #endregion
 
-        private bool _isMouseOver;
+        [Header("Maximize Icon Settings")] public Image maximizeImage;
+        public Sprite maximizeIconNormal;
+        public Sprite maximizeIconMaximized;
+
+        private bool _ignoreNonClientHitTest;
         private bool _initialized;
 
 
@@ -111,16 +115,17 @@ namespace Borderless
 
         protected virtual void CheckMouseOver()
         {
-            _isMouseOver = false;
+            _ignoreNonClientHitTest = false;
 
             //Check 3D
             if (Camera.main != null)
             {
                 var origin = Camera.main.ScreenPointToRay(Input.mousePosition).origin;
                 var direction = Camera.main.ScreenPointToRay(Input.mousePosition).direction;
-                _isMouseOver = Physics.Raycast(origin, direction, out var hit, 100, Physics.DefaultRaycastLayers);
+                _ignoreNonClientHitTest =
+                    Physics.Raycast(origin, direction, out var hit, 100, Physics.DefaultRaycastLayers);
 
-                if (_isMouseOver)
+                if (_ignoreNonClientHitTest)
                 {
                     return;
                 }
@@ -142,7 +147,7 @@ namespace Borderless
             var results = new List<RaycastResult>();
             EventSystem.current.RaycastAll(pointerEventData, results);
 
-            _isMouseOver = results.Count > 0;
+            _ignoreNonClientHitTest = results.Count > 0;
         }
 
         #region Window Settings Methods
@@ -197,6 +202,8 @@ namespace Borderless
             NewWindowProcedure = WindowProcedure;
             NewWindowProcedurePtr = Marshal.GetFunctionPointerForDelegate(NewWindowProcedure);
             OldWindowProcedurePtr = User32.SetWindowLongPtr(HandledWindow, -4, NewWindowProcedurePtr);
+
+            debug.text = "Initialize";
         }
 
         protected virtual void TerminateWindowProcedure()
@@ -209,6 +216,8 @@ namespace Borderless
             OldWindowProcedurePtr = IntPtr.Zero;
             NewWindowProcedurePtr = IntPtr.Zero;
             NewWindowProcedure = null;
+
+            debug.text = "Terminate";
         }
 
         ~Window()
@@ -224,16 +233,19 @@ namespace Borderless
                 return IntPtr.Zero;
             }
 
-            if (message == (uint) WindowMessages.NcDestroy || message == (uint) WindowMessages.WindowPosChanging)
+            if (message == (uint) WindowMessages.NcDestroy /* || message == (uint) WindowMessages.WindowPosChanging*/)
             {
+                debug.text = "NcDestroy";
                 TerminateWindowProcedure();
             }
 
+            //Clamp Window Size
             if (message == (uint) WindowMessages.GetMinMaxInfo)
             {
                 GetMinMaxInfo(lParam);
             }
 
+            //Resize
             if (message == (uint) WindowMessages.Sizing)
             {
                 if (KeepAspectRatio)
@@ -242,41 +254,12 @@ namespace Borderless
                 }
             }
 
-
-//            if (message == (uint) WindowMessages.SystemCommand)
-//            {
-//                var combinedWParam = (uint) wParam & (uint) SystemCommandParameters.WParamCombineValue;
-//                var systemCommandParameter = (SystemCommandParameters) combinedWParam;
-//
-//                debug.text += WindowMessages.SystemCommand + " / wParam : " + systemCommandParameter + "\n";
-//            }
-//
-//            if (message == (uint) WindowMessages.ShowWindow)
-//            {
-//                debug.text += WindowMessages.ShowWindow + " / wParam : " + wParam + " / lParam : " + lParam + "\n";
-//            }
-//
-//            if (message == (uint) WindowMessages.SizeClipboard)
-//            {
-//                debug.text += WindowMessages.SizeClipboard + " / wParam : " + wParam + " / lParam : " + lParam + "\n";
-//            }
-//
-//            if (message == (uint) WindowMessages.WindowPosChanging)
-//            {
-//                debug.text += WindowMessages.WindowPosChanging + " / wParam : " + wParam + " / lParam : " + lParam +
-//                              "\n";
-//            }
-//
-//            if (message == (uint) WindowMessages.StyleChanging)
-//            {
-//                debug.text += WindowMessages.StyleChanging + " / wParam : " + wParam + " / lParam : " + lParam + "\n";
-//            }
-//
-//            if (message == (uint) WindowMessages.PaletteIsChanging)
-//            {
-//                debug.text += WindowMessages.PaletteIsChanging + " / wParam : " + wParam + " / lParam : " + lParam +
-//                              "\n";
-//            }
+            //Minimize Maximize
+            if (message == (uint) WindowMessages.HShell_GetMinRect)
+            {
+                HShell_GetMinRect(handleWindow, wParam, lParam);
+//                debug.text += (WindowMessages) message + " / wParam : " + wParam + " / lParam : " + lParam + "\n";
+            }
 
             if (message != (uint) WindowMessages.Close &&
                 message != (uint) WindowMessages.Input &&
@@ -301,22 +284,31 @@ namespace Borderless
                 message != (uint) WindowMessages.NcHitTest &&
                 message != (uint) WindowMessages.Moving &&
                 message != (uint) WindowMessages.IME_SetContext &&
-                message != (uint) WindowMessages.CaptureChanged
+//                message != (uint) WindowMessages.CaptureChanged &&
+                message != (uint) WindowMessages.GetIcon &&
+                message != (uint) WindowMessages.KeyDown &&
+                message != (uint) WindowMessages.Char &&
+                message != (uint) WindowMessages.KeyUp &&
+                //===================================
+                message != (uint) WindowMessages.HShell_Language &&
+                message != (uint) WindowMessages.ActivateApp &&
+                message != (uint) WindowMessages.SystemKeyDown &&
+                message != (uint) WindowMessages.CaptureChanged &&
+                message != (uint) WindowMessages.WindowPosChanged &&
+                message != (uint) WindowMessages.HShell_ActivateShellWindow
+//                message != (uint) WindowMessages.Char &&
             )
             {
-                debug.text += (WindowMessages) message + " / wParam : " + wParam + " / lParam : " + lParam +
-                             "\n";
+//                debug.text += (WindowMessages) message + " / wParam : " + wParam + " / lParam : " + lParam + "\n";
             }
 
-            
-            
-            
-//            debug.text = ((WindowMessages)message).ToString() + "\n";
 
+            //Non Client Hit Test
             if (message == (uint) WindowMessages.NcHitTest)
             {
-                if (!_isMouseOver)
+                if (!_ignoreNonClientHitTest)
                 {
+                    //Get Cursor Area
                     var resize = NonClientHitTest();
 
                     if (resize != (int) HitTestValues.Client)
@@ -330,7 +322,7 @@ namespace Borderless
         }
 
 
-        #region Procedures
+        #region Procedure Methods
 
         protected virtual void GetMinMaxInfo(IntPtr inValue)
         {
@@ -392,9 +384,26 @@ namespace Borderless
 
         protected virtual int NonClientHitTest()
         {
-            var cursorPositionFlag = Cursor.GetCursorPositionFlag(this);
+            var cursorPositionFlag = Cursor.GetCursorAreaFlags(this);
 
             return (int) cursorPositionFlag;
+        }
+
+        private void HShell_GetMinRect(IntPtr handleWindow, IntPtr wParam, IntPtr lParam)
+        {
+            var flag = (HShellGetMinRectFlags) wParam;
+
+            switch (flag)
+            {
+                case HShellGetMinRectFlags.Restore:
+                    maximizeImage.sprite = maximizeIconNormal;
+                    break;
+                case HShellGetMinRectFlags.Minimize:
+                    break;
+                case HShellGetMinRectFlags.Maximize:
+                    maximizeImage.sprite = maximizeIconMaximized;
+                    break;
+            }
         }
 
         #endregion

@@ -12,42 +12,62 @@ namespace Borderless
             return new Vector2(point.X, point.Y);
         }
 
-        public static HitTestValues GetCursorPositionFlag(Window window)
+        public static HitTestValues GetCursorAreaFlags(Window window)
         {
             var mousePosition = GetCursorPosition();
-
-            return GetSpecificCursorPositionFlags(mousePosition, window);
-        }
-
-
-        public static HitTestValues GetSpecificCursorPositionFlags(Vector2 cursorPoint, Window window)
-        {
             var rectPoints = window.GetWindowRectPoints();
-            var mousePosition = cursorPoint;
             var resizeBorderSize = window.ResizeBorderSize;
 
+
+            return GetCursorAreaFlags(mousePosition, rectPoints, resizeBorderSize, window.CaptionHeight);
+        }
+
+        public static HitTestValues GetCursorAreaFlags(Vector2 cursorPoint, Window window)
+        {
+            var mousePosition = cursorPoint;
+            var rectPoints = window.GetWindowRectPoints();
+            var resizeBorderSize = window.ResizeBorderSize;
+
+
+            return GetCursorAreaFlags(mousePosition, rectPoints, resizeBorderSize, window.CaptionHeight);
+        }
+
+        public static HitTestValues GetCursorAreaFlags(Vector2 cursorPoint, Rect windowRect,
+            Vector4Int borderSize, int captionHeight)
+        {
             HitTestValues cursorPositionFlags;
 
             //Left
             if (MathExtension.IsBetween
                 (
-                    mousePosition.x,
-                    rectPoints.Left,
-                    rectPoints.Left + resizeBorderSize.x,
+                    cursorPoint.x,
+                    windowRect.Left,
+                    windowRect.Left + borderSize.x,
                     false
                 )
             )
             {
                 cursorPositionFlags = HitTestValues.LeftBorder;
 
-                if (MathExtension.IsBetween(mousePosition.y, rectPoints.Top, rectPoints.Top + resizeBorderSize.y,
-                    false))
+                if (MathExtension.IsBetween
+                    (
+                        cursorPoint.y,
+                        windowRect.Top,
+                        windowRect.Top + borderSize.y,
+                        false
+                    )
+                )
                 {
                     cursorPositionFlags = HitTestValues.TopLeftBorder;
                 }
-                else if (MathExtension.IsBetween(mousePosition.y, rectPoints.Bottom - resizeBorderSize.w,
-                    rectPoints.Bottom,
-                    false))
+                else if (MathExtension.IsBetween
+                    (
+                        cursorPoint.y,
+                        windowRect.Bottom - borderSize.w,
+                        windowRect.Bottom,
+                        false
+                    )
+                )
                 {
                     cursorPositionFlags = HitTestValues.BottomLeftBorder;
                 }
@@ -55,23 +75,34 @@ namespace Borderless
             //Right
             else if (MathExtension.IsBetween
                 (
-                    mousePosition.x,
-                    rectPoints.Right - resizeBorderSize.z,
-                    rectPoints.Right,
+                    cursorPoint.x,
+                    windowRect.Right - borderSize.z,
+                    windowRect.Right,
                     false
                 )
             )
             {
                 cursorPositionFlags = HitTestValues.RightBorder;
 
-                if (MathExtension.IsBetween(mousePosition.y, rectPoints.Top, rectPoints.Top + resizeBorderSize.y,
-                    false))
+                if (MathExtension.IsBetween
+                    (
+                        cursorPoint.y,
+                        windowRect.Top,
+                        windowRect.Top + borderSize.y,
+                        false
+                    )
+                )
                 {
                     cursorPositionFlags = HitTestValues.TopRightBorder;
                 }
-                else if (MathExtension.IsBetween(mousePosition.y, rectPoints.Bottom - resizeBorderSize.w,
-                    rectPoints.Bottom,
-                    false))
+                else if (MathExtension.IsBetween
+                    (
+                        cursorPoint.y,
+                        windowRect.Bottom - borderSize.w,
+                        windowRect.Bottom,
+                        false
+                    )
+                )
                 {
                     cursorPositionFlags = HitTestValues.BottomRightBorder;
                 }
@@ -79,9 +110,9 @@ namespace Borderless
             //Top
             else if (MathExtension.IsBetween
                 (
-                    mousePosition.y,
-                    rectPoints.Top,
-                    rectPoints.Top + resizeBorderSize.y,
+                    cursorPoint.y,
+                    windowRect.Top,
+                    windowRect.Top + borderSize.y,
                     false
                 )
             )
@@ -90,9 +121,9 @@ namespace Borderless
             }
             else if (MathExtension.IsBetween
                 (
-                    mousePosition.y,
-                    rectPoints.Top + resizeBorderSize.y,
-                    rectPoints.Top + window.CaptionHeight,
+                    cursorPoint.y,
+                    windowRect.Top + borderSize.y,
+                    windowRect.Top + captionHeight,
                     false
                 )
             )
@@ -102,9 +133,9 @@ namespace Borderless
             //Bottom
             else if (MathExtension.IsBetween
                 (
-                    mousePosition.y,
-                    rectPoints.Bottom - resizeBorderSize.w,
-                    rectPoints.Bottom,
+                    cursorPoint.y,
+                    windowRect.Bottom - borderSize.w,
+                    windowRect.Bottom,
                     false
                 )
             )
