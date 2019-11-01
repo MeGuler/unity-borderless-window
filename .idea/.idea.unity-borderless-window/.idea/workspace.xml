@@ -10,53 +10,24 @@
   </component>
   <component name="HighlightingSettingsPerFile">
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/08A73C22-71E8-4174-A007-0AD56CBC0910/5b/015b5de0/POINT.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/Assets/__Project/Scripts/_TEST/TestWindow.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/Assets/__Project/Scripts/Windows Api/Apis/DwmApi.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/FD91C077-A8ED-4A58-AA91-24B36DD6F89B/2a/34066d8c/Rectangle.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/474BCD72-6FCE-44B1-9167-DD7A17E5D597/93/4c87deb8/ExecuteEvents.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/Assets/__Project/Scripts/Windows Api/Flags/HitTestValues.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/C0EF81E1-639B-423A-B35C-E0E4C08B5B7A/ae/b4ce117a/UnityEvent.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/Assets/__Project/Scripts/Windows Api/Flags/WindowMessages.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/__Project/Scripts/Window/Base/Window.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/TextMesh Pro/Examples &amp; Extras/Scripts/SkewTextExample.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/Assets/__Project/Scripts/Windows Api/Flags/WindowLongIndex.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/Assets/__Project/Scripts/Windows Api/Flags/WindowShowCommands.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/Assets/__Project/Scripts/Windows Api/Flags/MonitorFlags.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/Assets/__Project/Scripts/Windows Api/Flags/SetWindowPosFlags.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/Assets/__Project/Scripts/Windows Api/Flags/SizingWindowSide.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/Assets/__Project/Scripts/_TEST/Test.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/Assets/__Project/Scripts/Windows Api/Apis/kernel32.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/Assets/__Project/Scripts/Windows Api/Structures/Rect.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/Assets/__Project/Scripts/Windows Api/Structures/MonitorInfo.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/FD91C077-A8ED-4A58-AA91-24B36DD6F89B/b7/fba30d6f/Point.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/__Project/Scripts/Window/Base/WindowProcedure.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/TextMesh Pro/Examples &amp; Extras/Scripts/Benchmark01.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/Assets/__Project/Scripts/Windows Api/Structures/WindowPlacement.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/Assets/__Project/Scripts/Windows Api/Structures/Margins.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/Assets/__Project/Scripts/Window/TransparentMaker.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/Assets/__Project/Scripts/_TEST/TestBorderlessWindow.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/Assets/__Project/Scripts/Window - Manuel Size/WindowStyle.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/Assets/__Project/Shaders/MakeTransparent.shader" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/Assets/__Project/Scripts/Window/BorderlessWindow.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/Assets/__Project/Scripts/Window - Manuel Size/WindowMover.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/Assets/__Project/Scripts/Windows Api/Flags/HShellGetMinRectFlags.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/Assets/__Project/Scripts/Window - Manuel Size/CursorData.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/__Project/Scripts/Window/Base/Cursor.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/Assets/__Project/Scripts/Window - Manuel Size/Managers/CursorManager.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/TextMesh Pro/Examples &amp; Extras/Scripts/TMP_DigitValidator.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/Assets/__Project/Scripts/Windows Api/Apis/WinEvents.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Assets/__Project/Scripts/Extensions/Vector4Int.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/__Project/Scripts/Extensions/MathExtension.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/EF28F193-EAB6-4E49-B44B-3FB27EAB4F75/b0/9948a06e/HandleRef.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/Assets/__Project/Scripts/Window - Manuel Size/Managers/WindowManager.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/08A73C22-71E8-4174-A007-0AD56CBC0910/c3/53484688/RECT.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/Assets/__Project/Scripts/Windows Api/Apis/User32.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/Assets/__Project/Scripts/Windows Api/Flags/SystemCommandParameters.cs" root0="FORCE_HIGHLIGHTING" />
   </component>
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/Assets/__Project/Scripts/Window/WinApi/DwmApi.cs" />
-        <option value="$PROJECT_DIR$/Assets/__Project/Scripts/Window/WinApi/Structures/MinMaxInfo.cs" />
-        <option value="$PROJECT_DIR$/Assets/__Project/Scripts/Window/WinApi/Structures/Point.cs" />
-        <option value="$PROJECT_DIR$/Assets/__Project/Scripts/Window/WinApi/Structures/POINT.cs" />
         <option value="$PROJECT_DIR$/Assets/__Project/Scripts/Window/WinApi/Structures/Margins.cs" />
         <option value="$PROJECT_DIR$/Assets/__Project/Scripts/Window/WinApi/Structures/RECT.cs" />
         <option value="$PROJECT_DIR$/Assets/__Project/Scripts/Window/WinApi/User32.cs" />
@@ -75,9 +46,7 @@
         <option value="$PROJECT_DIR$/Assets/__Project/Scripts/Window/Window.cs" />
         <option value="$PROJECT_DIR$/Assets/__Project/Scripts/Windows Api/Flags/ShowWindowCommands.cs" />
         <option value="$PROJECT_DIR$/Assets/__Project/Scripts/Window - Manual Size/WindowStyle.cs" />
-        <option value="$PROJECT_DIR$/Assets/__Project/Scripts/Windows Api/Structures/WindowPlacement.cs" />
         <option value="$PROJECT_DIR$/Assets/__Project/Scripts/Windows Api/Flags/SizingWindowSide.cs" />
-        <option value="$PROJECT_DIR$/Assets/__Project/Scripts/Extensions/MathExtension.cs" />
         <option value="$PROJECT_DIR$/Assets/__Project/Scripts/Windows Api/Flags/MonitorFlags.cs" />
         <option value="$PROJECT_DIR$/Assets/__Project/Scripts/Windows Api/Structures/MonitorInfo.cs" />
         <option value="$PROJECT_DIR$/Assets/__Project/Shaders/ChromakeyTransparent.shader" />
@@ -85,25 +54,31 @@
         <option value="$PROJECT_DIR$/Assets/__Project/Scripts/Window - Manuel Size/WindowMover.cs" />
         <option value="$PROJECT_DIR$/Assets/__Project/Scripts/Window - Manuel Size/Managers/CursorManager.cs" />
         <option value="$PROJECT_DIR$/Assets/__Project/Scripts/Window - Manuel Size/CursorData.cs" />
-        <option value="$PROJECT_DIR$/Assets/__Project/Scripts/Window - Manuel Size/WindowStyle.cs" />
         <option value="$PROJECT_DIR$/Assets/__Project/Scripts/Window - Manuel Size/Managers/WindowManager.cs" />
         <option value="$PROJECT_DIR$/Assets/__Project/Shaders/MakeTransparent.shader" />
         <option value="$PROJECT_DIR$/Assets/__Project/Scripts/Window/TransparentMaker.cs" />
         <option value="$PROJECT_DIR$/Assets/__Project/Scripts/Windows Api/Apis/kernel32Api.cs" />
         <option value="$PROJECT_DIR$/Assets/__Project/Scripts/Windows Api/Apis/kernel32.cs" />
-        <option value="$PROJECT_DIR$/Assets/__Project/Scripts/_TEST/Test.cs" />
         <option value="$PROJECT_DIR$/Assets/__Project/Scripts/Windows Api/Apis/DwmApi.cs" />
-        <option value="$PROJECT_DIR$/Assets/__Project/Scripts/Windows Api/Apis/User32.cs" />
-        <option value="$PROJECT_DIR$/Assets/__Project/Scripts/Windows Api/Apis/WinEvents.cs" />
         <option value="$PROJECT_DIR$/Assets/__Project/Scripts/Windows Api/Flags/SystemCommandParameters.cs" />
         <option value="$PROJECT_DIR$/Assets/__Project/Scripts/Windows Api/Flags/WindowMessages.cs" />
         <option value="$PROJECT_DIR$/Assets/__Project/Scripts/Windows Api/Flags/HShellGetMinRectFlags.cs" />
-        <option value="$PROJECT_DIR$/Assets/__Project/Scripts/Window/BorderlessWindow.cs" />
-        <option value="$PROJECT_DIR$/Assets/__Project/Scripts/Window/Base/Cursor.cs" />
-        <option value="$PROJECT_DIR$/Assets/__Project/Scripts/Window/Base/Window.cs" />
-        <option value="$PROJECT_DIR$/Assets/__Project/Scripts/Window/Base/WindowProcedure.cs" />
         <option value="$PROJECT_DIR$/Assets/__Project/Scripts/_TEST/TestBorderlessWindow.cs" />
         <option value="$PROJECT_DIR$/Assets/__Project/Scripts/_TEST/TestWindow.cs" />
+        <option value="$PROJECT_DIR$/Assets/__Project/Scripts/_TEST/Test.cs" />
+        <option value="$PROJECT_DIR$/Assets/__Project/Scripts/Windows Api/Apis/User32.cs" />
+        <option value="$PROJECT_DIR$/Assets/__Project/Scripts/Windows Api/Structures/Margins.cs" />
+        <option value="$PROJECT_DIR$/Assets/__Project/Scripts/Extensions/Vector4Int.cs" />
+        <option value="$PROJECT_DIR$/Assets/__Project/Scripts/Window/Base/WindowProcedure.cs" />
+        <option value="$PROJECT_DIR$/Assets/__Project/Scripts/Window - Manuel Size/WindowStyle.cs" />
+        <option value="$PROJECT_DIR$/Assets/__Project/Scripts/Windows Api/Structures/Rect.cs" />
+        <option value="$PROJECT_DIR$/Assets/__Project/Scripts/Windows Api/Structures/WindowPlacement.cs" />
+        <option value="$PROJECT_DIR$/Assets/__Project/Scripts/Window/Base/Cursor.cs" />
+        <option value="$PROJECT_DIR$/Assets/__Project/Scripts/Window/BorderlessWindow.cs" />
+        <option value="$PROJECT_DIR$/Assets/__Project/Scripts/Windows Api/Apis/Kernel32.cs" />
+        <option value="$PROJECT_DIR$/Assets/__Project/Scripts/Windows Api/Apis/WinEvents.cs" />
+        <option value="$PROJECT_DIR$/Assets/__Project/Scripts/Window/Base/Window.cs" />
+        <option value="$PROJECT_DIR$/Assets/__Project/Scripts/Extensions/MathExtension.cs" />
       </list>
     </option>
   </component>
@@ -184,6 +159,7 @@
       <workItem from="1572247420411" duration="5625000" />
       <workItem from="1572415381759" duration="9953000" />
       <workItem from="1572431152872" duration="5414000" />
+      <workItem from="1572589373301" duration="5662000" />
     </task>
     <servers />
   </component>
@@ -207,7 +183,7 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="DotNet Breakpoints">
           <url>file://$PROJECT_DIR$/Assets/__Project/Scripts/Window/Base/Window.cs</url>
-          <line>392</line>
+          <line>229</line>
           <properties documentPath="$PROJECT_DIR$/Assets/__Project/Scripts/Window/Base/Window.cs" initialLine="383">
             <startOffsets>
               <option value="14456" />

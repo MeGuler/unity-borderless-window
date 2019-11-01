@@ -1,131 +1,103 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
-using System.Security.Permissions;
-using System.Text;
 using UnityEngine;
-using UnityEngine.EventSystems;
-using Borderless.Api;
-using Borderless.Api.Structures;
-using Borderless.Flags;
-using TMPro;
 using UnityEngine.UI;
+using UnityEngine.EventSystems;
+using TMPro;
+using Window.Apis;
+using Window.Structures;
+using Window.Flags;
 
 
-namespace Borderless
+namespace Window
 {
     public class Window : MonoBehaviour
     {
-//        public User32.WinEventDelegate EventProcedure { get; protected set; }
-//
-//        protected void WinEventProc(IntPtr hWinEventHook, uint eventType, IntPtr hwnd, int idObject, int idChild,
-//            uint dwEventThread, uint dwmsEventTime)
-//        {
-//            debug.text += "hWinEventHook : " + hWinEventHook.ToInt32() + "\n";
-//            debug.text += "eventType : " + eventType + "\n";
-//            debug.text += "hwnd : " + hwnd.ToInt32() + "\n";
-//            debug.text += "idObject : " + idObject + "\n";
-//            debug.text += "idChild : " + idChild + "\n";
-//            debug.text += "dwEventThread : " + dwEventThread + "\n";
-//            debug.text += "dwmsEventTime : " + dwmsEventTime + "\n";
-//            debug.text += "=========================================================" + "\n";
-//        }
-//
-//        private IntPtr eventHook;
-//        private void OnEnable()
-//        {
-//            EventProcedure = WinEventProc;
-//            eventHook = User32.SetWinEventHook
-//            (
-//                WinEvents.EVENT_SYSTEM_FOREGROUND,
-//                WinEvents.EVENT_SYSTEM_FOREGROUND,
-//                HandledWindow.Handle,
-//                EventProcedure,
-//                0,
-//                0,
-//                WinEvents.WINEVENT_OUTOFCONTEXT
-//            );
-//        }
-//
-//        private void OnDisable()
-//        {
-//            User32.UnhookWinEvent(eventHook);
-//        }
+        private readonly Vector2Int _defaultMinWindowSize = new Vector2Int(200, 200);
+        public WindowProcedure windowProcedure;
+        public HandleRef HandledWindow => windowProcedure.HandledWindow;
 
-
-        #region Window Procedure Properties
-
-        public HandleRef HandledWindow { get; protected set; }
-        public IntPtr OldWindowProcedurePtr { get; protected set; }
-        public IntPtr NewWindowProcedurePtr { get; protected set; }
-        public User32.WindowProcedureDelegate NewWindowProcedure { get; protected set; }
-
-        #endregion
 
         #region Window Settings
 
-        private readonly Vector2Int _defaultMinWindowSize = new Vector2Int(200, 200);
+        [Header("Window Settings")] public int captionHeight;
 
-        public Vector4Int ResizeBorderSize { get; protected set; }
-        public Vector2Int StartWindowSize { get; protected set; }
-        public Vector2Int MinWindowSize { get; protected set; }
-        public Vector2Int MaxWindowSize { get; protected set; }
-        public int CaptionHeight { get; protected set; }
-        public bool KeepAspectRatio { get; protected set; }
+        public bool keepAspectRatio;
+        public Vector2Int defaultWindowSize;
+        public Vector2Int minWindowSize;
+        public Vector2Int maxWindowSize;
+        public Vector4Int resizeBorderSize;
 
         #endregion
+
+        #region Maximize Icon
 
         [Header("Maximize Icon Settings")] public Image maximizeImage;
         public Sprite maximizeIconNormal;
         public Sprite maximizeIconMaximized;
 
-        private bool _ignoreNonClientHitTest;
-        private bool _initialized;
+        #endregion
 
+
+        [Header("Debug")] public TMP_InputField debug;
 
         private Vector2 _aspectRatio;
 
-        public TMP_InputField debug;
 
         protected virtual void Awake()
         {
-            SettingMinMaxWindowSize();
+            SetMinMaxWindowSize();
 
-            HandleWindow();
-            InitializeWindowProcedure();
+            windowProcedure = new WindowProcedure(resizeBorderSize, captionHeight);
+            windowProcedure.Sizing += Sizing;
+            windowProcedure.GetMinMaxInfo += GetMinMaxInfo;
+            windowProcedure.HShellGetMinRect += HShellGetMinRect;
+
             SetWindowStyle();
             SetWindowDefaultSize();
 
-            var aspectRatioX = StartWindowSize.x / (float) StartWindowSize.y;
-            var aspectRatioY = StartWindowSize.y / (float) StartWindowSize.x;
-
-            _aspectRatio.x = aspectRatioX;
-            _aspectRatio.y = aspectRatioY;
+            _aspectRatio.x = defaultWindowSize.x / (float) defaultWindowSize.y;
+            _aspectRatio.y = defaultWindowSize.y / (float) defaultWindowSize.x;
         }
 
         protected virtual void OnGUI()
         {
-            if (!_initialized)
-            {
-                InitializeWindowProcedure();
-            }
-
             CheckMouseOver();
+        }
+
+        protected virtual void SetMinMaxWindowSize()
+        {
+            var minWindowSize = this.minWindowSize;
+            var maxWindowSize = this.maxWindowSize;
+
+            //Check Negative 
+            minWindowSize.x = minWindowSize.x < 0 ? 0 : minWindowSize.x;
+            minWindowSize.y = minWindowSize.y < 0 ? 0 : minWindowSize.y;
+            maxWindowSize.x = maxWindowSize.x < 0 ? 0 : maxWindowSize.x;
+            maxWindowSize.y = maxWindowSize.y < 0 ? 0 : maxWindowSize.y;
+
+            //Check Default min
+            minWindowSize.x = minWindowSize.x > 0 ? minWindowSize.x : _defaultMinWindowSize.x;
+            minWindowSize.y = minWindowSize.y > 0 ? minWindowSize.y : _defaultMinWindowSize.y;
+
+            this.minWindowSize = minWindowSize;
+            this.maxWindowSize = maxWindowSize;
         }
 
         protected virtual void CheckMouseOver()
         {
-            _ignoreNonClientHitTest = false;
+            windowProcedure.IgnoreNonClientHitTest = false;
 
             //Check 3D
             if (Camera.main != null)
             {
                 var origin = Camera.main.ScreenPointToRay(Input.mousePosition).origin;
                 var direction = Camera.main.ScreenPointToRay(Input.mousePosition).direction;
-                _ignoreNonClientHitTest =
+                windowProcedure.IgnoreNonClientHitTest =
                     Physics.Raycast(origin, direction, out var hit, 100, Physics.DefaultRaycastLayers);
 
-                if (_ignoreNonClientHitTest)
+                if (windowProcedure.IgnoreNonClientHitTest)
                 {
                     return;
                 }
@@ -147,210 +119,82 @@ namespace Borderless
             var results = new List<RaycastResult>();
             EventSystem.current.RaycastAll(pointerEventData, results);
 
-            _ignoreNonClientHitTest = results.Count > 0;
+            windowProcedure.IgnoreNonClientHitTest = results.Count > 0;
         }
 
-        #region Window Settings Methods
+        #region Window Button Methods
 
-        protected void SettingMinMaxWindowSize()
+        public virtual void Minimize()
         {
-            var minWindowSize = MinWindowSize;
-            var maxWindowSize = MaxWindowSize;
+            var placement = GetWindowPlacement();
 
-            //Check Negative 
-            minWindowSize.x = minWindowSize.x < 0 ? 0 : minWindowSize.x;
-            minWindowSize.y = minWindowSize.y < 0 ? 0 : minWindowSize.y;
-            maxWindowSize.x = maxWindowSize.x < 0 ? 0 : maxWindowSize.x;
-            maxWindowSize.y = maxWindowSize.y < 0 ? 0 : maxWindowSize.y;
 
-            //Check Default min
-            minWindowSize.x = minWindowSize.x > 0 ? minWindowSize.x : _defaultMinWindowSize.x;
-            minWindowSize.y = minWindowSize.y > 0 ? minWindowSize.y : _defaultMinWindowSize.y;
+            if (placement.windowShowCommand == WindowShowCommands.ShowMinimized)
+            {
+                placement.windowShowCommand = WindowShowCommands.Restore;
+            }
+            else
+            {
+                placement.windowShowCommand = WindowShowCommands.ShowMinimized;
+            }
 
-            MinWindowSize = minWindowSize;
-            MaxWindowSize = maxWindowSize;
+            User32.SetWindowPlacement(HandledWindow.Handle, ref placement);
+        }
+
+        public virtual void Maximize()
+        {
+            var placement = GetWindowPlacement();
+
+            if (placement.windowShowCommand == WindowShowCommands.Maximize)
+            {
+                placement.windowShowCommand = WindowShowCommands.Restore;
+            }
+            else
+            {
+                placement.windowShowCommand = WindowShowCommands.Maximize;
+            }
+
+            User32.SetWindowPlacement(HandledWindow.Handle, ref placement);
+        }
+
+        public virtual void ExitApplication()
+        {
+            Application.Quit();
         }
 
         #endregion
 
-        #region Window Procedure Methods
+        #region Window Procedures
 
-        protected void HandleWindow()
+        protected virtual void GetMinMaxInfo(IntPtr handledWindow, IntPtr firstParameter, IntPtr secondParameter)
         {
-            //https://gist.github.com/mattbenic/908483ad0bedbc62ab17
-            var threadId = kernel32.GetCurrentThreadId();
-            User32.EnumThreadWindows(threadId, (hWnd, lParam) =>
-            {
-                var classText = new StringBuilder(User32.UnityWindowClassName.Length + 1);
-                User32.GetClassName(hWnd, classText, classText.Capacity);
-                if (classText.ToString() == User32.UnityWindowClassName)
-                {
-                    HandledWindow = new HandleRef(null, hWnd);
-                    return false;
-                }
+            var minMaxInfo = (MinMaxInfo) Marshal.PtrToStructure(secondParameter, typeof(MinMaxInfo));
 
-                return true;
-            }, IntPtr.Zero);
+            minMaxInfo.ptMinTrackSize.X = minWindowSize.x;
+            minMaxInfo.ptMinTrackSize.Y = minWindowSize.y;
+
+            if ((minWindowSize.x > 0 && maxWindowSize.x > minWindowSize.x) ||
+                maxWindowSize.x > _defaultMinWindowSize.x)
+            {
+                minMaxInfo.ptMaxTrackSize.X = maxWindowSize.x;
+            }
+
+            if ((minWindowSize.y > 0 && maxWindowSize.y > minWindowSize.y) ||
+                maxWindowSize.y > _defaultMinWindowSize.y)
+            {
+                minMaxInfo.ptMaxTrackSize.Y = maxWindowSize.y;
+            }
+
+
+            Marshal.StructureToPtr(minMaxInfo, secondParameter, false);
         }
 
-        protected virtual void InitializeWindowProcedure()
+        protected virtual void Sizing(IntPtr handledWindow, IntPtr firstParameter, IntPtr secondParameter)
         {
-            if (NewWindowProcedure != null) return;
+            if (!keepAspectRatio) return;
 
-            _initialized = true;
-
-            NewWindowProcedure = WindowProcedure;
-            NewWindowProcedurePtr = Marshal.GetFunctionPointerForDelegate(NewWindowProcedure);
-            OldWindowProcedurePtr = User32.SetWindowLongPtr(HandledWindow, -4, NewWindowProcedurePtr);
-
-            debug.text = "Initialize";
-        }
-
-        protected virtual void TerminateWindowProcedure()
-        {
-            if (NewWindowProcedure == null) return;
-
-            _initialized = false;
-
-            User32.SetWindowLongPtr(HandledWindow, -4, OldWindowProcedurePtr);
-            OldWindowProcedurePtr = IntPtr.Zero;
-            NewWindowProcedurePtr = IntPtr.Zero;
-            NewWindowProcedure = null;
-
-            debug.text = "Terminate";
-        }
-
-        ~Window()
-        {
-            TerminateWindowProcedure();
-        }
-
-        [PermissionSet(SecurityAction.Demand, Name = "FullTrust")]
-        protected virtual IntPtr WindowProcedure(IntPtr handleWindow, uint message, IntPtr wParam, IntPtr lParam)
-        {
-            if (handleWindow != HandledWindow.Handle)
-            {
-                return IntPtr.Zero;
-            }
-
-            if (message == (uint) WindowMessages.NcDestroy /* || message == (uint) WindowMessages.WindowPosChanging*/)
-            {
-                debug.text = "NcDestroy";
-                TerminateWindowProcedure();
-            }
-
-            //Clamp Window Size
-            if (message == (uint) WindowMessages.GetMinMaxInfo)
-            {
-                GetMinMaxInfo(lParam);
-            }
-
-            //Resize
-            if (message == (uint) WindowMessages.Sizing)
-            {
-                if (KeepAspectRatio)
-                {
-                    Sizing(wParam, lParam);
-                }
-            }
-
-            //Minimize Maximize
-            if (message == (uint) WindowMessages.HShell_GetMinRect)
-            {
-                HShell_GetMinRect(handleWindow, wParam, lParam);
-//                debug.text += (WindowMessages) message + " / wParam : " + wParam + " / lParam : " + lParam + "\n";
-            }
-
-            if (message != (uint) WindowMessages.Close &&
-                message != (uint) WindowMessages.Input &&
-                message != (uint) WindowMessages.WindowPosChanging &&
-                message != (uint) WindowMessages.MouseMove &&
-                message != (uint) WindowMessages.MouseActivate &&
-                message != (uint) WindowMessages.MouseHover &&
-                message != (uint) WindowMessages.MouseFirst &&
-                message != (uint) WindowMessages.MouseLast &&
-                message != (uint) WindowMessages.MouseLeave &&
-                message != (uint) WindowMessages.MouseWheel &&
-                message != (uint) WindowMessages.NC_MouseMove &&
-                message != (uint) WindowMessages.NC_MouseHover &&
-                message != (uint) WindowMessages.NC_MouseLeave &&
-                message != (uint) WindowMessages.LeftButtonDown &&
-                message != (uint) WindowMessages.LeftButtonUp &&
-                message != (uint) WindowMessages.LeftButtonDoubleClick &&
-                message != (uint) WindowMessages.NC_LeftButtonDown &&
-                message != (uint) WindowMessages.NC_LeftButtonUp &&
-                message != (uint) WindowMessages.NC_LeftButtonDoubleClick &&
-                message != (uint) WindowMessages.SetCursor &&
-                message != (uint) WindowMessages.NcHitTest &&
-                message != (uint) WindowMessages.Moving &&
-                message != (uint) WindowMessages.IME_SetContext &&
-//                message != (uint) WindowMessages.CaptureChanged &&
-                message != (uint) WindowMessages.GetIcon &&
-                message != (uint) WindowMessages.KeyDown &&
-                message != (uint) WindowMessages.Char &&
-                message != (uint) WindowMessages.KeyUp &&
-                //===================================
-                message != (uint) WindowMessages.HShell_Language &&
-                message != (uint) WindowMessages.ActivateApp &&
-                message != (uint) WindowMessages.SystemKeyDown &&
-                message != (uint) WindowMessages.CaptureChanged &&
-                message != (uint) WindowMessages.WindowPosChanged &&
-                message != (uint) WindowMessages.HShell_ActivateShellWindow
-//                message != (uint) WindowMessages.Char &&
-            )
-            {
-//                debug.text += (WindowMessages) message + " / wParam : " + wParam + " / lParam : " + lParam + "\n";
-            }
-
-
-            //Non Client Hit Test
-            if (message == (uint) WindowMessages.NcHitTest)
-            {
-                if (!_ignoreNonClientHitTest)
-                {
-                    //Get Cursor Area
-                    var resize = NonClientHitTest();
-
-                    if (resize != (int) HitTestValues.Client)
-                    {
-                        return (IntPtr) resize;
-                    }
-                }
-            }
-
-            return User32.CallWindowProc(OldWindowProcedurePtr, handleWindow, message, wParam, lParam);
-        }
-
-
-        #region Procedure Methods
-
-        protected virtual void GetMinMaxInfo(IntPtr inValue)
-        {
-            var minMaxInfo = (MinMaxInfo) Marshal.PtrToStructure(inValue, typeof(MinMaxInfo));
-
-            minMaxInfo.ptMinTrackSize.X = MinWindowSize.x;
-            minMaxInfo.ptMinTrackSize.Y = MinWindowSize.y;
-
-            if ((MinWindowSize.x > 0 && MaxWindowSize.x > MinWindowSize.x) ||
-                MaxWindowSize.x > _defaultMinWindowSize.x)
-            {
-                minMaxInfo.ptMaxTrackSize.X = MaxWindowSize.x;
-            }
-
-            if ((MinWindowSize.y > 0 && MaxWindowSize.y > MinWindowSize.y) ||
-                MaxWindowSize.y > _defaultMinWindowSize.y)
-            {
-                minMaxInfo.ptMaxTrackSize.Y = MaxWindowSize.y;
-            }
-
-
-            Marshal.StructureToPtr(minMaxInfo, inValue, false);
-        }
-
-        protected virtual void Sizing(IntPtr wParam, IntPtr lParam)
-        {
-            var rect = (Rect) Marshal.PtrToStructure(lParam, typeof(Rect));
-            var sizingSide = wParam.ToInt32();
+            var rect = (Rect) Marshal.PtrToStructure(secondParameter, typeof(Rect));
+            var sizingSide = firstParameter.ToInt32();
 
             if (sizingSide == (int) SizingWindowSide.Left || sizingSide == (int) SizingWindowSide.Right)
             {
@@ -379,19 +223,12 @@ namespace Borderless
                 rect.Right = rect.Left + (int) (rect.Height / _aspectRatio.y);
             }
 
-            Marshal.StructureToPtr(rect, lParam, true);
+            Marshal.StructureToPtr(rect, secondParameter, true);
         }
 
-        protected virtual int NonClientHitTest()
+        protected virtual void HShellGetMinRect(IntPtr handledWindow, IntPtr firstParameter, IntPtr secondParameter)
         {
-            var cursorPositionFlag = Cursor.GetCursorAreaFlags(this);
-
-            return (int) cursorPositionFlag;
-        }
-
-        private void HShell_GetMinRect(IntPtr handleWindow, IntPtr wParam, IntPtr lParam)
-        {
-            var flag = (HShellGetMinRectFlags) wParam;
+            var flag = (HShellGetMinRectFlags) firstParameter;
 
             switch (flag)
             {
@@ -408,9 +245,9 @@ namespace Borderless
 
         #endregion
 
-        #endregion
+        #region Window Style Methods
 
-        #region Window Manager Methods
+        #region Set
 
         protected virtual void ShowWindow(WindowShowCommands windowShowStatus)
         {
@@ -434,8 +271,8 @@ namespace Borderless
             var info = GetMonitorInfo();
 
             Vector2 centerWindow;
-            centerWindow.x = (info.MonitorRect.Width - StartWindowSize.x) / 2f;
-            centerWindow.y = (info.MonitorRect.Height - StartWindowSize.y) / 2f;
+            centerWindow.x = (info.MonitorRect.Width - defaultWindowSize.x) / 2f;
+            centerWindow.y = (info.MonitorRect.Height - defaultWindowSize.y) / 2f;
 
             const uint message = (uint)
             (
@@ -448,23 +285,30 @@ namespace Borderless
                 0,
                 (int) centerWindow.x,
                 (int) centerWindow.y,
-                StartWindowSize.x,
-                StartWindowSize.y,
+                defaultWindowSize.x,
+                defaultWindowSize.y,
                 message
             );
         }
 
-        public MonitorInfo GetMonitorInfo()
+        #endregion
+
+        #region Get
+
+        public virtual MonitorInfo GetMonitorInfo()
         {
             var monitor = User32.MonitorFromWindow(HandledWindow.Handle, (int) MonitorFlag.DefaultToNearest);
 
-            var info = new MonitorInfo();
-            info.Size = Marshal.SizeOf(typeof(MonitorInfo));
+            var info = new MonitorInfo
+            {
+                Size = Marshal.SizeOf(typeof(MonitorInfo))
+            };
+
             User32.GetMonitorInfo(monitor, ref info);
             return info;
         }
 
-        public UnityEngine.Rect GetWindowRect()
+        public virtual UnityEngine.Rect GetWindowRect()
         {
             User32.GetWindowRect(HandledWindow.Handle, out var windowRect);
 
@@ -479,19 +323,21 @@ namespace Borderless
             return rect;
         }
 
-        public Rect GetWindowRectPoints()
+        public virtual Rect GetWindowRectPoints()
         {
             User32.GetWindowRect(HandledWindow.Handle, out var windowRect);
             return windowRect;
         }
 
-        public WindowPlacement GetWindowPlacement()
+        public virtual WindowPlacement GetWindowPlacement()
         {
             var placement = new WindowPlacement();
             placement.Length = Marshal.SizeOf(placement);
             User32.GetWindowPlacement(HandledWindow.Handle, ref placement);
             return placement;
         }
+
+        #endregion
 
         #endregion
     }

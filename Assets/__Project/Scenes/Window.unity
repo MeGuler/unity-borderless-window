@@ -260,7 +260,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1786374980}
+      - m_Target: {fileID: 1852944260}
         m_MethodName: Minimize
         m_Mode: 1
         m_Arguments:
@@ -1349,7 +1349,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1786374980}
+      - m_Target: {fileID: 1852944260}
         m_MethodName: Maximize
         m_Mode: 1
         m_Arguments:
@@ -1524,7 +1524,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1786374980}
+      - m_Target: {fileID: 1852944260}
         m_MethodName: ExitApplication
         m_Mode: 1
         m_Arguments:
@@ -2166,64 +2166,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1761385576}
   m_CullTransparentMesh: 0
---- !u!1 &1786374979
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1786374981}
-  - component: {fileID: 1786374980}
-  m_Layer: 0
-  m_Name: GameObject
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!114 &1786374980
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1786374979}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c45c7c17514272e4db45603d6ec3d68b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  maximizeImage: {fileID: 1252391444}
-  maximizeIconNormal: {fileID: 21300000, guid: 95a960762eab97e498471354b907b2f7, type: 3}
-  maximizeIconMaximized: {fileID: 21300000, guid: 89f23e4eb4103f34c8ab5024b5af6c58,
-    type: 3}
-  debug: {fileID: 617779636}
-  resizeBorderSize:
-    x: 5
-    y: 5
-    z: 5
-    w: 5
-  startWindowSize: {x: 1280, y: 720}
-  minWindowSize: {x: 0, y: 0}
-  maxWindowSize: {x: 1280, y: 720}
-  captionHeight: 35
-  keepAspectRatio: 0
---- !u!4 &1786374981
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1786374979}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 1063.901, y: 599.407, z: 19.21875}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_RootOrder: 3
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1803417594
 GameObject:
   m_ObjectHideFlags: 0
@@ -2238,7 +2180,7 @@ GameObject:
   - component: {fileID: 1803417595}
   - component: {fileID: 1803417600}
   m_Layer: 5
-  m_Name: Window
+  m_Name: ===== [ Window Canvas ] =====
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2276,7 +2218,7 @@ MonoBehaviour:
   m_UiScaleMode: 0
   m_ReferencePixelsPerUnit: 15
   m_ScaleFactor: 1
-  m_ReferenceResolution: {x: 800, y: 600}
+  m_ReferenceResolution: {x: 1280, y: 720}
   m_ScreenMatchMode: 0
   m_MatchWidthOrHeight: 0
   m_PhysicalUnit: 3
@@ -2317,7 +2259,7 @@ RectTransform:
   m_Children:
   - {fileID: 2067261413}
   m_Father: {fileID: 0}
-  m_RootOrder: 1
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
@@ -2347,12 +2289,12 @@ GameObject:
   - component: {fileID: 1852944261}
   - component: {fileID: 1852944260}
   m_Layer: 0
-  m_Name: GameObject (1)
+  m_Name: ===== [ Window Manager ] =====
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!114 &1852944260
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2365,21 +2307,21 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a65e1bd04edc1f545a8dac195b2110a6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maximizeImage: {fileID: 1252391444}
-  maximizeIconNormal: {fileID: 21300000, guid: 95a960762eab97e498471354b907b2f7, type: 3}
-  maximizeIconMaximized: {fileID: 21300000, guid: 89f23e4eb4103f34c8ab5024b5af6c58,
-    type: 3}
-  debug: {fileID: 617779636}
+  captionHeight: 35
+  keepAspectRatio: 1
+  defaultWindowSize: {x: 1280, y: 720}
+  minWindowSize: {x: 0, y: 0}
+  maxWindowSize: {x: 1280, y: 720}
   resizeBorderSize:
     x: 5
     y: 5
     z: 5
     w: 5
-  startWindowSize: {x: 1280, y: 720}
-  minWindowSize: {x: 0, y: 0}
-  maxWindowSize: {x: 1280, y: 720}
-  captionHeight: 35
-  keepAspectRatio: 0
+  maximizeImage: {fileID: 1252391444}
+  maximizeIconNormal: {fileID: 21300000, guid: 95a960762eab97e498471354b907b2f7, type: 3}
+  maximizeIconMaximized: {fileID: 21300000, guid: 89f23e4eb4103f34c8ab5024b5af6c58,
+    type: 3}
+  debug: {fileID: 617779636}
 --- !u!4 &1852944261
 Transform:
   m_ObjectHideFlags: 0
@@ -2392,7 +2334,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 4
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1909923412
 GameObject:
@@ -2531,7 +2473,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 2
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &2062059286
 GameObject:

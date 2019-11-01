@@ -1,7 +1,6 @@
 ﻿using System;
-using System.ComponentModel;
 
-namespace Borderless
+namespace Window
 {
     public static class MathExtension
     {
@@ -78,14 +77,5 @@ namespace Borderless
         {
             return a * b / GreatestCommonDivisor(a, b);
         }
-    }
-
-    [Serializable]
-    public class Vector4Int
-    {
-        [Description("Left")] public int x;
-        [Description("Top")] public int y;
-        [Description("Right")] public int z;
-        [Description("Bottom")] public int w;
     }
 }

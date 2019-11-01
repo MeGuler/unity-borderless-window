@@ -2,10 +2,11 @@ using System;
 using System.Runtime.InteropServices;
 using System.Security.Permissions;
 using System.Text;
-using Borderless.Api;
-using Borderless.Flags;
+using Window.Apis;
+using Window.Flags;
+using Window.Structures;
 
-namespace Borderless
+namespace Window
 {
     public class WindowProcedure
     {
@@ -16,6 +17,17 @@ namespace Borderless
 
         public delegate void WindowProcedureEventDelegate(IntPtr handledWindow, IntPtr firstParameter,
             IntPtr secondParameter);
+        
+        #region Events
+
+        public event WindowProcedureEventDelegate NcDestroy;
+        public event WindowProcedureEventDelegate NcHitTest;
+        public event WindowProcedureEventDelegate GetMinMaxInfo;
+        public event WindowProcedureEventDelegate Sizing;
+        public event WindowProcedureEventDelegate HShellGetMinRect;
+
+        #endregion
+        
 
         #region Window Procedure Properties
 
@@ -56,22 +68,13 @@ namespace Borderless
             return windowRect;
         }
 
-        #region Events
-
-        public event WindowProcedureEventDelegate NcDestroy;
-        public event WindowProcedureEventDelegate NcHitTest;
-        public event WindowProcedureEventDelegate GetMinMaxInfo;
-        public event WindowProcedureEventDelegate Sizing;
-        public event WindowProcedureEventDelegate HShellGetMinRect;
-
-        #endregion
-
+        
         #region Window Procedures
 
         private void HandleWindow()
         {
             //https://gist.github.com/mattbenic/908483ad0bedbc62ab17
-            var threadId = kernel32.GetCurrentThreadId();
+            var threadId = Kernel32.GetCurrentThreadId();
             User32.EnumThreadWindows(threadId, (hWnd, lParam) =>
             {
                 var classText = new StringBuilder(User32.UnityWindowClassName.Length + 1);

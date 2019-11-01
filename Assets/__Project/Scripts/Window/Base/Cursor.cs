@@ -1,8 +1,9 @@
-﻿using Borderless.Api;
-using Borderless.Flags;
-using UnityEngine;
+﻿using UnityEngine;
+using Window.Apis;
+using Window.Flags;
+using Window.Structures;
 
-namespace Borderless
+namespace Window
 {
     public static class Cursor
     {
@@ -16,22 +17,22 @@ namespace Borderless
         {
             var mousePosition = GetCursorPosition();
             var rectPoints = window.GetWindowRectPoints();
-            var resizeBorderSize = window.ResizeBorderSize;
+            var resizeBorderSize = window.resizeBorderSize;
 
 
-            return GetCursorAreaFlags(mousePosition, rectPoints, resizeBorderSize, window.CaptionHeight);
+            return GetCursorAreaFlags(mousePosition, rectPoints, resizeBorderSize, window.captionHeight);
         }
 
         public static HitTestValues GetCursorAreaFlags(Vector2 cursorPoint, Window window)
         {
             var mousePosition = cursorPoint;
             var rectPoints = window.GetWindowRectPoints();
-            var resizeBorderSize = window.ResizeBorderSize;
+            var resizeBorderSize = window.resizeBorderSize;
 
 
-            return GetCursorAreaFlags(mousePosition, rectPoints, resizeBorderSize, window.CaptionHeight);
+            return GetCursorAreaFlags(mousePosition, rectPoints, resizeBorderSize, window.captionHeight);
         }
-
+        
         public static HitTestValues GetCursorAreaFlags(Vector2 cursorPoint, Rect windowRect,
             Vector4Int borderSize, int captionHeight)
         {
